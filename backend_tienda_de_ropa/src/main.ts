@@ -13,14 +13,17 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('API Rest Cafeteria SIS257')
-    .setDescription('API Rest de la materia Desarrollo de Aplicación Int/Internet II')
+    .setDescription(
+      'API Rest de la materia Desarrollo de Aplicación Int/Internet II',
+    )
     .setVersion('1.0')
-    .addTag('productos, clientes, empleados, ventas, detalles')
+    .addTag('productos, ventas, ventaDetalle')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('apidoc', app, documentFactory);
 
-  await app.listen(process.env.PORT ?? 0);
+  await app.listen(process.env.PORT ?? 3001);
   console.log(`App corriendo en ${await app.getUrl()}`);
 }
-bootstrap();
+
+void bootstrap();

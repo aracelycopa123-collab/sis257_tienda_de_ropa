@@ -1,38 +1,36 @@
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Carrito } from 'src/carrito/entities/carrito.entity';
+import { VentaDetalle } from 'src/ventaDetalle/entities/ventaDetalle.entity';
 
-@Entity('productos')
+@Entity('producto')
 export class Producto {
-  @PrimaryGeneratedColumn('identity')
-  id: number;
+  @PrimaryGeneratedColumn('identity', { name: 'id_producto' })
+  idProducto: number;
 
   @Column('varchar', { length: 100 })
   nombre: string;
 
-  @Column('varchar', { length: 50 })
-  categoria: string;
+  @Column('text')
+  descripcion: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
   precio: number;
 
+  @Column({ type: 'enum', enum: ['S', 'M', 'L', 'XL'] })
+  talla: 'S' | 'M' | 'L' | 'XL';
+
   @Column('int')
   stock: number;
 
-  @Column('varchar', { length: 2000 })
-  descripcion: string;
+  @Column('varchar', { length: 50 })
+  categoria: string;
 
-  @CreateDateColumn({ name: 'fecha_creacion' })
-  fechaCreacion: Date;
+  @Column('varchar', { length: 255 })
+  imagen: string;
 
-  @UpdateDateColumn({ name: 'fecha_modificacion' })
-  fechaModificacion: Date;
+  @OneToMany(() => Carrito, (carrito: Carrito) => carrito.producto)
+  carritos: Carrito[];
 
-  @DeleteDateColumn({ name: 'fecha_eliminacion' })
-  fechaEliminacion: Date;
+  @OneToMany(() => VentaDetalle, (vd: VentaDetalle) => vd.producto)
+  ventaDetalles: VentaDetalle[];
 }

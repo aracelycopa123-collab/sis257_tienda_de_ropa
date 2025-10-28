@@ -1,42 +1,39 @@
-import { Cliente } from 'src/clientes/entities/cliente.entity';
-import { Empleado } from 'src/empleados/entities/empleado.entity';
 import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
+import { Usuario } from 'src/usuario/entities/usuario.entity';
+import { VentaDetalle } from 'src/ventaDetalle/entities/ventaDetalle.entity';
 
-@Entity('Ventas')
+@Entity('venta')
 export class Venta {
-  @PrimaryGeneratedColumn('identity')
-  id: number;
+  @PrimaryGeneratedColumn('identity', { name: 'id_venta' })
+  idVenta: number;
 
-  @Column({ name: 'fecha' })
+  @Column('timestamp', { name: 'fecha', default: () => 'CURRENT_TIMESTAMP' })
   fecha: Date;
 
-  @Column({ name: 'total', type: 'decimal', precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2 })
   total: number;
 
-  @Column({ name: 'cliente_id' })
-  idCliente: number;
+  @Column({
+    type: 'enum',
+    enum: ['efectivo', 'tarjeta', 'transferencia'],
+    name: 'metodo_pago',
+  })
+  metodo_pago: 'efectivo' | 'tarjeta' | 'transferencia';
 
-  @Column({ name: 'empleado_id' })
-  idEmpleado: number;
+  @Column('int', { name: 'id_usuario' })
+  idUsuario: number;
 
-  @CreateDateColumn({ name: 'fecha_creacion' })
-  echaCreacion: Date;
-  @UpdateDateColumn({ name: 'fecha_modificacion' })
-  fechaModificacion: Date;
-  @DeleteDateColumn({ name: 'fecha_eliminacion' })
-  fechaEliminacion: Date;
+  @ManyToOne(() => Usuario, (usuario: Usuario) => usuario.ventas)
+  @JoinColumn({ name: 'id_usuario' })
+  usuario: Usuario;
 
-  @ManyToOne(() => Cliente, (cliente) => cliente.ventas)
-  cliente: Cliente;
-
-  @ManyToOne(() => Venta, (venta) => venta.empleados)
-  empleados: Empleado;
+  @OneToMany(() => VentaDetalle, (vd: VentaDetalle) => vd.venta)
+  ventaDetalles: VentaDetalle[];
 }

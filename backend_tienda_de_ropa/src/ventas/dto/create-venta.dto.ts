@@ -27,14 +27,5 @@ export class CreateVentaDto {
     { message: 'El campo idCliente debe ser un número válido' },
   )
   @IsPositive({ message: 'El idCliente debe ser un número positivo' })
-  readonly idCliente: number;
-
-  @ApiProperty()
-  @IsNotEmpty({ message: 'El campo idEmpleado es obligatorio' })
-  @IsNumber(
-    { allowInfinity: false, allowNaN: false },
-    { message: 'El campo idEmpleado debe ser un número válido' },
-  )
-  @IsPositive({ message: 'El idEmpleado debe ser un número positivo' })
-  readonly idEmpleado: number;
+  readonly idUsuario: number;
 }

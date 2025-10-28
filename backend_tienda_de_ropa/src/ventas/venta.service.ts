@@ -16,8 +16,7 @@ export class VentaService {
     let venta = await this.ventaRepository.findOneBy({
       fecha: createVentaDto.fecha,
       total: createVentaDto.total,
-      idCliente: createVentaDto.idCliente,
-      idEmpleado: createVentaDto.idEmpleado,
+      idUsuario: createVentaDto.idUsuario,
     });
     if (venta) throw new ConflictException('La venta ya existe');
     venta = this.ventaRepository.create(createVentaDto);
@@ -29,7 +28,7 @@ export class VentaService {
   }
 
   async findOne(id: number): Promise<Venta> {
-    const venta = await this.ventaRepository.findOneBy({ id });
+    const venta = await this.ventaRepository.findOneBy({ idVenta: id });
     if (!venta) throw new ConflictException('El id es obligatorio');
     return venta;
   }
