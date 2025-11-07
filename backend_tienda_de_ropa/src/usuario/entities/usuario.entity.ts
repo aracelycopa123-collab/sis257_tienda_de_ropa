@@ -16,11 +16,14 @@ export class Usuario {
   @Column('varchar', { length: 100 })
   nombre: string;
 
-  @Column('varchar', { length: 200 })
+  @Column('varchar', { length: 200, unique: true })
   correo: string;
 
-  @Column('varchar', { length: 200 })
-  contraseña: string;
+  @Column('varchar', { length: 20, unique: true })
+  usuario: string;
+
+  @Column('varchar', { length: 100 })
+  password: string;
 
   @Column({ type: 'enum', enum: ['admin', 'cliente'], default: 'cliente' })
   rol: 'admin' | 'cliente';

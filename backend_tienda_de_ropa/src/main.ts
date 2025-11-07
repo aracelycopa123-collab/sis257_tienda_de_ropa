@@ -12,18 +12,34 @@ async function bootstrap() {
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle('API Rest Cafeteria SIS257')
+    .setTitle('API Rest Tienda de Ropa SIS257')
     .setDescription(
-      'API Rest de la materia Desarrollo de Aplicación Int/Internet II',
+      'Backend API REST para la Tienda de Ropa - Desarrollo de Aplicación Int/Internet II\n\n' +
+      'Endpoints disponibles para:\n' +
+      '- Gestión de Productos\n' +
+      '- Gestión de Ventas\n' +
+      '- Carrito de Compras\n' +
+      '- Gestión de Clientes\n' +
+      '- Gestión de Empleados\n' +
+      '- Gestión de Usuarios\n' +
+      '- Detalles de Ventas'
     )
     .setVersion('1.0')
-    .addTag('productos, ventas, ventaDetalle')
+    .addBearerAuth()
+    .addTag('productos', 'Operaciones con productos')
+    .addTag('ventas', 'Operaciones de ventas')
+    .addTag('carrito', 'Operaciones del carrito de compras')
+    .addTag('clientes', 'Gestión de clientes')
+    .addTag('empleados', 'Gestión de empleados')
+    .addTag('usuarios', 'Gestión de usuarios y autenticación')
+    .addTag('venta-detalle', 'Detalles de las ventas')
     .build();
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('apidoc', app, documentFactory);
 
-  await app.listen(process.env.PORT ?? 3001);
-  console.log(`App corriendo en ${await app.getUrl()}`);
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api-docs', app, document);
+
+  await app.listen(3000);
+  console.log(`Documentación de la API disponible en http://localhost:3000/api-docs`);
 }
 
-void bootstrap();
+bootstrap();

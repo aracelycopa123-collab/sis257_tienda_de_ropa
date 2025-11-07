@@ -9,7 +9,12 @@ import {
 } from 'class-validator';
 
 export class CreateProductoDto {
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Camisa Casual',
+    description: 'Nombre del producto',
+    maxLength: 100,
+    required: true
+  })
   @IsNotEmpty({ message: 'El campo nombre es obligatorio' })
   @IsString({ message: 'El campo nombre debe ser de tipo cadena' })
   @MaxLength(100, {
@@ -20,7 +25,12 @@ export class CreateProductoDto {
   )
   readonly nombre: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Camisas',
+    description: 'Categoría del producto',
+    maxLength: 50,
+    required: true
+  })
   @IsNotEmpty({ message: 'El campo categoria es obligatorio' })
   @IsString({ message: 'El campo categoria debe ser de tipo cadena' })
   @MaxLength(50, {
