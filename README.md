@@ -65,4 +65,4 @@ se describen las entidades iniciales del sistema y los campos que podrían forma
 - Cantidad
 
 
->>>>>>> 35732a87ec1529a0145912b75573d23d9d5f3386
+
