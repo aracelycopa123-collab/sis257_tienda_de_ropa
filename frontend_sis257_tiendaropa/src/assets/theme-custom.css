@@ -1,0 +1,194 @@
+/* Estilos personalizados para la tienda */
+:root {
+  --bs-primary: #ffa15c;
+  --bs-secondary: #fe7a15;
+  --bs-success: #19cc61;
+  --bs-info: #00a1fc;
+  --bs-warning: #ffa15c;
+  --bs-danger: #ff705c;
+  --bs-light: #f9fafd;
+  --bs-dark: #212121;
+}
+
+body {
+  font-family: 'Jost', 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #424242;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #212121;
+  font-weight: 700;
+}
+
+.navbar {
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Carousel personalizado */
+.carousel-control-prev,
+.carousel-control-next {
+  opacity: 1;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  opacity: 0.7;
+}
+
+/* Cards de productos */
+.card {
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card img {
+  transition: transform 0.3s ease;
+}
+
+.card:hover img {
+  transform: scale(1.05);
+}
+
+.bg-200 {
+  background-color: #eeeeee;
+}
+
+.text-1000 {
+  color: #212121;
+}
+
+.text-600 {
+  color: #9e9e9e;
+}
+
+/* Sección hero */
+.py-11 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.mt-7 {
+  margin-top: 4rem;
+}
+
+.py-0 {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Colores de Bootstrap personalizados */
+.btn-dark {
+  background-color: #212121;
+  border-color: #212121;
+}
+
+.btn-dark:hover {
+  background-color: #ffa15c;
+  border-color: #ffa15c;
+}
+
+.btn-light {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: #212121;
+}
+
+.btn-light:hover {
+  background-color: #ffa15c;
+  border-color: #ffa15c;
+  color: white;
+}
+
+/* Navbar responsive */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    border-top: 1px solid #eeeeee;
+    margin-top: 1rem;
+  }
+}
+
+/* Sección de categorías */
+.nav-tabs {
+  border-bottom: 2px solid #eeeeee;
+}
+
+.nav-tabs .nav-link {
+  color: #424242;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+}
+
+.nav-tabs .nav-link.active {
+  color: #ffa15c;
+  border-color: #ffa15c;
+  background-color: transparent;
+}
+
+/* Gradient backgrounds */
+.bg-light-gradient {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.bg-dark-gradient {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+/* Overlay effects */
+.overlay {
+  position: relative;
+}
+
+.overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Card spans */
+.card-span {
+  border: none;
+  overflow: hidden;
+}
+
+.card-img-overlay {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+/* Typography */
+.fw-semi-bold {
+  font-weight: 600;
+}
+
+.lh-sm {
+  line-height: 1.2;
+}
+
+/* Buttons personalizado */
+.btn {
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+/* Footer */
+footer {
+  background-color: #212121;
+  color: white;
+}
+
+/* Responsive utilities */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
