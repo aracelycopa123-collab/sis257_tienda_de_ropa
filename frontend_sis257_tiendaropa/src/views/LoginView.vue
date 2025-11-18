@@ -13,10 +13,10 @@ async function onSubmit() {
   loading.value = true
   error.value = false
   const authStore = useAuthStore()
-  
+
   try {
     const success = await authStore.login(usuario.value, clave.value)
-    
+
     if (success) {
       router.push(authStore.returnUrl || '/dashboard')
     } else {
@@ -35,9 +35,9 @@ async function onSubmit() {
     <div class="login-card">
       <!-- Logo y Título -->
       <div class="text-center mb-5">
-        <img 
-          src="/majestic-v1.0.1/public/assets/img/gallery/logo.png" 
-          alt="Majestic" 
+        <img
+          src="/src/assets/img/gallery/logo.png"
+          alt="Majestic"
           class="logo mb-4"
         />
         <h1 class="login-title mb-2">Bienvenido</h1>
@@ -80,8 +80,8 @@ async function onSubmit() {
           <span>Usuario o contraseña incorrectos</span>
         </div>
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           class="btn-login"
           :disabled="loading"
         >
@@ -254,7 +254,7 @@ async function onSubmit() {
   .login-card {
     padding: 40px 30px;
   }
-  
+
   .login-title {
     font-size: 1.75rem;
   }

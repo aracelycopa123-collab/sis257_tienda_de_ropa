@@ -30,7 +30,7 @@ const formCliente = ref({
 
 // Datos de pago
 const formPago = ref({
-  metodoPago: 'tarjeta' as 'efectivo' | 'tarjeta' | 'transferencia' | 'qr',
+  metodoPago: 'tarjeta' as 'efectivo' | 'tarjeta' | 'transferencia' | 'QR',
   numeroTarjeta: '',
   nombreTarjeta: '',
   fechaExpiracion: '',
@@ -55,7 +55,7 @@ const cambio = computed(() => {
 // Validaciones
 const validarPaso1 = (): boolean => {
   errores.value = {}
-  
+
   if (!formCliente.value.nombre.trim()) {
     errores.value.nombre = 'El nombre es requerido'
   }
@@ -76,30 +76,30 @@ const validarPaso1 = (): boolean => {
   if (!formCliente.value.ciudad.trim()) {
     errores.value.ciudad = 'La ciudad es requerida'
   }
-  
+
   return Object.keys(errores.value).length === 0
 }
 
 const validarPaso2 = (): boolean => {
   errores.value = {}
-  
+
   if (formPago.value.metodoPago === 'tarjeta') {
     if (!formPago.value.numeroTarjeta.trim()) {
       errores.value.numeroTarjeta = 'Número de tarjeta requerido'
     } else if (formPago.value.numeroTarjeta.replace(/\s/g, '').length !== 16) {
       errores.value.numeroTarjeta = 'Número de tarjeta inválido'
     }
-    
+
     if (!formPago.value.nombreTarjeta.trim()) {
       errores.value.nombreTarjeta = 'Nombre requerido'
     }
-    
+
     if (!formPago.value.fechaExpiracion.trim()) {
       errores.value.fechaExpiracion = 'Fecha requerida'
     } else if (!/^\d{2}\/\d{2}$/.test(formPago.value.fechaExpiracion)) {
       errores.value.fechaExpiracion = 'Formato MM/YY'
     }
-    
+
     if (!formPago.value.cvv.trim()) {
       errores.value.cvv = 'CVV requerido'
     } else if (!/^\d{3,4}$/.test(formPago.value.cvv)) {
@@ -110,7 +110,7 @@ const validarPaso2 = (): boolean => {
       errores.value.montoPagado = 'Monto insuficiente'
     }
   }
-  
+
   return Object.keys(errores.value).length === 0
 }
 
@@ -150,7 +150,7 @@ const formatearFechaExpiracion = () => {
 const procesarPago = async () => {
   try {
     cargando.value = true
-    
+
     // 1. Crear o buscar cliente
     const clienteResponse = await http.post('clientes', {
       nombre: formCliente.value.nombre,
@@ -158,40 +158,40 @@ const procesarPago = async () => {
       telefono: formCliente.value.telefono,
       direccion: `${formCliente.value.direccion}, ${formCliente.value.ciudad}, ${formCliente.value.codigoPostal}`
     })
-    
+
     const clienteId = clienteResponse.data.id
-    
+
     // 2. Crear venta con detalles
     const detalles = carritoStore.items.map(item => ({
       idProducto: item.productoId,
       cantidad: item.cantidad
     }))
-    
+
     const ventaData = {
       idCliente: clienteId,
       metodoPago: formPago.value.metodoPago,
       detalles: detalles,
-      montoPagado: formPago.value.metodoPago === 'efectivo' 
-        ? formPago.value.montoPagado 
+      montoPagado: formPago.value.metodoPago === 'efectivo'
+        ? formPago.value.montoPagado
         : totalCarrito.value,
       cambio: cambio.value
     }
-    
+
     const ventaResponse = await http.post('ventas', ventaData)
     ventaId.value = ventaResponse.data.id
-    
+
     // 3. Simular procesamiento (2 segundos)
     await new Promise(resolve => setTimeout(resolve, 2000))
-    
+
     // 4. Ir a confirmación
     pasoActual.value = 3
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    
+
     // 5. Vaciar carrito después de mostrar confirmación
     setTimeout(() => {
       carritoStore.vaciarCarrito()
     }, 1000)
-    
+
   } catch (error: any) {
     console.error('Error al procesar pago:', error)
     errores.value.general = error.response?.data?.message || 'Error al procesar el pago. Intenta nuevamente.'
@@ -239,13 +239,13 @@ const volverInicio = () => {
         <!-- Paso 1: Datos de Envío -->
         <div v-if="pasoActual === 1" class="checkout-step">
           <h2 class="step-title">Información de Envío</h2>
-          
+
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Nombre</label>
-              <input 
-                v-model="formCliente.nombre" 
-                type="text" 
+              <input
+                v-model="formCliente.nombre"
+                type="text"
                 class="form-input"
                 :class="{ error: errores.nombre }"
                 placeholder="Juan"
@@ -255,9 +255,9 @@ const volverInicio = () => {
 
             <div class="form-group">
               <label class="form-label">Apellido</label>
-              <input 
-                v-model="formCliente.apellido" 
-                type="text" 
+              <input
+                v-model="formCliente.apellido"
+                type="text"
                 class="form-input"
                 :class="{ error: errores.apellido }"
                 placeholder="Pérez"
@@ -267,9 +267,9 @@ const volverInicio = () => {
 
             <div class="form-group">
               <label class="form-label">Teléfono</label>
-              <input 
-                v-model="formCliente.telefono" 
-                type="tel" 
+              <input
+                v-model="formCliente.telefono"
+                type="tel"
                 class="form-input"
                 :class="{ error: errores.telefono }"
                 placeholder="+591 70000000"
@@ -279,9 +279,9 @@ const volverInicio = () => {
 
             <div class="form-group">
               <label class="form-label">Email</label>
-              <input 
-                v-model="formCliente.email" 
-                type="email" 
+              <input
+                v-model="formCliente.email"
+                type="email"
                 class="form-input"
                 :class="{ error: errores.email }"
                 placeholder="correo@ejemplo.com"
@@ -291,9 +291,9 @@ const volverInicio = () => {
 
             <div class="form-group full-width">
               <label class="form-label">Dirección</label>
-              <input 
-                v-model="formCliente.direccion" 
-                type="text" 
+              <input
+                v-model="formCliente.direccion"
+                type="text"
                 class="form-input"
                 :class="{ error: errores.direccion }"
                 placeholder="Calle Principal #123"
@@ -303,9 +303,9 @@ const volverInicio = () => {
 
             <div class="form-group">
               <label class="form-label">Ciudad</label>
-              <input 
-                v-model="formCliente.ciudad" 
-                type="text" 
+              <input
+                v-model="formCliente.ciudad"
+                type="text"
                 class="form-input"
                 :class="{ error: errores.ciudad }"
                 placeholder="Santa Cruz"
@@ -315,9 +315,9 @@ const volverInicio = () => {
 
             <div class="form-group">
               <label class="form-label">Código Postal</label>
-              <input 
-                v-model="formCliente.codigoPostal" 
-                type="text" 
+              <input
+                v-model="formCliente.codigoPostal"
+                type="text"
                 class="form-input"
                 placeholder="0000"
               />
@@ -328,17 +328,17 @@ const volverInicio = () => {
         <!-- Paso 2: Método de Pago -->
         <div v-if="pasoActual === 2" class="checkout-step">
           <h2 class="step-title">Método de Pago</h2>
-          
+
           <!-- Selector de Método -->
           <div class="payment-methods">
-            <label 
-              v-for="metodo in ['tarjeta', 'efectivo', 'transferencia', 'qr']" 
+            <label
+              v-for="metodo in ['tarjeta', 'efectivo', 'transferencia', 'qr']"
               :key="metodo"
               class="payment-method"
             >
-              <input 
-                type="radio" 
-                v-model="formPago.metodoPago" 
+              <input
+                type="radio"
+                v-model="formPago.metodoPago"
                 :value="metodo"
                 name="metodoPago"
               />
@@ -350,10 +350,10 @@ const volverInicio = () => {
           <div v-if="formPago.metodoPago === 'tarjeta'" class="payment-form">
             <div class="form-group full-width">
               <label class="form-label">Número de Tarjeta</label>
-              <input 
-                v-model="formPago.numeroTarjeta" 
+              <input
+                v-model="formPago.numeroTarjeta"
                 @input="formatearNumeroTarjeta"
-                type="text" 
+                type="text"
                 class="form-input"
                 :class="{ error: errores.numeroTarjeta }"
                 placeholder="1234 5678 9012 3456"
@@ -364,9 +364,9 @@ const volverInicio = () => {
 
             <div class="form-group full-width">
               <label class="form-label">Nombre en la Tarjeta</label>
-              <input 
-                v-model="formPago.nombreTarjeta" 
-                type="text" 
+              <input
+                v-model="formPago.nombreTarjeta"
+                type="text"
                 class="form-input"
                 :class="{ error: errores.nombreTarjeta }"
                 placeholder="JUAN PEREZ"
@@ -378,10 +378,10 @@ const volverInicio = () => {
             <div class="form-grid-half">
               <div class="form-group">
                 <label class="form-label">Fecha de Expiración</label>
-                <input 
-                  v-model="formPago.fechaExpiracion" 
+                <input
+                  v-model="formPago.fechaExpiracion"
                   @input="formatearFechaExpiracion"
-                  type="text" 
+                  type="text"
                   class="form-input"
                   :class="{ error: errores.fechaExpiracion }"
                   placeholder="MM/YY"
@@ -392,9 +392,9 @@ const volverInicio = () => {
 
               <div class="form-group">
                 <label class="form-label">CVV</label>
-                <input 
-                  v-model="formPago.cvv" 
-                  type="text" 
+                <input
+                  v-model="formPago.cvv"
+                  type="text"
                   class="form-input"
                   :class="{ error: errores.cvv }"
                   placeholder="123"
@@ -409,9 +409,9 @@ const volverInicio = () => {
           <div v-if="formPago.metodoPago === 'efectivo'" class="payment-form">
             <div class="form-group">
               <label class="form-label">Monto a Pagar (Bs)</label>
-              <input 
-                v-model.number="formPago.montoPagado" 
-                type="number" 
+              <input
+                v-model.number="formPago.montoPagado"
+                type="number"
                 class="form-input"
                 :class="{ error: errores.montoPagado }"
                 :placeholder="`Mínimo: ${totalCarrito.toFixed(2)} Bs`"
@@ -427,7 +427,7 @@ const volverInicio = () => {
           </div>
 
           <!-- Mensaje para otros métodos -->
-          <div v-if="formPago.metodoPago === 'transferencia' || formPago.metodoPago === 'qr'" class="info-message">
+          <div v-if="formPago.metodoPago === 'transferencia' || formPago.metodoPago === 'QR'" class="info-message">
             <p>Los datos para realizar la {{ formPago.metodoPago }} se enviarán por correo electrónico.</p>
           </div>
 
@@ -441,7 +441,7 @@ const volverInicio = () => {
               <path d="M20 6L9 17l-5-5"/>
             </svg>
           </div>
-          
+
           <h2 class="success-title">¡Pedido Confirmado!</h2>
           <p class="success-message">
             Tu pedido #{{ ventaId }} ha sido procesado exitosamente.
@@ -458,7 +458,7 @@ const volverInicio = () => {
         <!-- Resumen del Pedido (Sidebar) -->
         <aside v-if="pasoActual < 3" class="order-summary">
           <h3 class="summary-title">Resumen del Pedido</h3>
-          
+
           <div class="summary-items">
             <div v-for="item in carritoStore.items" :key="item.id" class="summary-item">
               <img :src="item.imagen" :alt="item.nombre" class="summary-item-img" />

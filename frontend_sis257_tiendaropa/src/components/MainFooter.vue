@@ -60,11 +60,6 @@ import { RouterLink } from 'vue-router'
         </div>
         <div class="border-bottom border-3"></div>
         <div class="row flex-center my-3">
-          <div class="col-md-6 order-1 order-md-0">
-            <p class="my-2 text-1000 text-center text-md-start"> 
-              Hecho por eld4vd
-            </p>
-          </div>
           <div class="col-md-6">
             <div class="text-center text-md-end">
               <a href="#!"><span class="me-4" data-feather="facebook"></span></a>

@@ -26,13 +26,13 @@ const hideFooter = computed(() => {
     <RouterView />
   </main>
   <MainFooter v-if="!hideFooter" />
-  
+
   <!-- Toast Notification Global -->
   <ToastNotification />
 </template>
 
 <style>
-@import '/majestic-v1.0.1/public/assets/css/theme.css';
+@import '/src/assets/css/theme.css';
 
 html {
   scroll-behavior: smooth;
