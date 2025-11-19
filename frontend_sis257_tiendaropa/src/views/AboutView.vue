@@ -14,9 +14,7 @@ onMounted(() => {
         <div class="hero-content">
           <h1 class="hero-title">Sobre Nosotros</h1>
           <div class="hero-divider"></div>
-          <p class="hero-subtitle">
-            Definiendo el futuro de la moda minimalista desde 2024
-          </p>
+          <p class="hero-subtitle">Definiendo el futuro de la moda minimalista desde 2024</p>
         </div>
       </div>
     </section>
@@ -28,9 +26,9 @@ onMounted(() => {
         <div class="content-block">
           <div class="row align-items-center">
             <div class="col-lg-6">
-              <img 
-                src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80" 
-                alt="Tienda moderna" 
+              <img
+                src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80"
+                alt="Tienda moderna"
                 class="content-image"
               />
             </div>
@@ -38,14 +36,14 @@ onMounted(() => {
               <div class="content-text">
                 <h2 class="section-title">Nuestra Historia</h2>
                 <p class="section-paragraph">
-                  Fundada en 2024, MAJESTIC nace de la visión de crear una experiencia de compra 
-                  donde la calidad y el diseño atemporal se encuentren con la accesibilidad. 
-                  Inspirados por las marcas nórdicas de lujo contemporáneo, creamos colecciones 
-                  que trascienden las tendencias efímeras.
+                  Fundada en 2024, ROMA nace de la visión de crear una experiencia de compra donde
+                  la calidad y el diseño atemporal se encuentren con la accesibilidad. Inspirados
+                  por las marcas nórdicas de lujo contemporáneo, creamos colecciones que trascienden
+                  las tendencias efímeras.
                 </p>
                 <p class="section-paragraph">
-                  Cada pieza es cuidadosamente seleccionada pensando en la versatilidad, 
-                  durabilidad y el minimalismo sofisticado que define el estilo moderno.
+                  Cada pieza es cuidadosamente seleccionada pensando en la versatilidad, durabilidad
+                  y el minimalismo sofisticado que define el estilo moderno.
                 </p>
               </div>
             </div>
@@ -56,9 +54,9 @@ onMounted(() => {
         <div class="content-block reverse">
           <div class="row align-items-center">
             <div class="col-lg-6 order-lg-2">
-              <img 
-                src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80" 
-                alt="Filosofía de diseño" 
+              <img
+                src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80"
+                alt="Filosofía de diseño"
                 class="content-image"
               />
             </div>
@@ -66,14 +64,13 @@ onMounted(() => {
               <div class="content-text">
                 <h2 class="section-title">Nuestra Filosofía</h2>
                 <p class="section-paragraph">
-                  Creemos en el poder de la simplicidad. Cada prenda en nuestra colección 
-                  está diseñada para ser combinable, duradera y relevante más allá de las 
-                  estaciones. Rechazamos la moda rápida y apostamos por piezas que acompañen 
-                  tu estilo de vida.
+                  Creemos en el poder de la simplicidad. Cada prenda en nuestra colección está
+                  diseñada para ser combinable, duradera y relevante más allá de las estaciones.
+                  Rechazamos la moda rápida y apostamos por piezas que acompañen tu estilo de vida.
                 </p>
                 <p class="section-paragraph">
-                  Nuestro compromiso va más allá de la estética: trabajamos con materiales 
-                  de calidad superior y procesos que respetan tanto al artesano como al medio ambiente.
+                  Nuestro compromiso va más allá de la estética: trabajamos con materiales de
+                  calidad superior y procesos que respetan tanto al artesano como al medio ambiente.
                 </p>
               </div>
             </div>
@@ -87,47 +84,77 @@ onMounted(() => {
             <div class="col-md-4">
               <div class="value-card">
                 <div class="value-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  >
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
                 </div>
                 <h3 class="value-title">Calidad Atemporal</h3>
                 <p class="value-description">
-                  Seleccionamos materiales premium que mejoran con el tiempo y diseños 
-                  que permanecen relevantes año tras año.
+                  Seleccionamos materiales premium que mejoran con el tiempo y diseños que
+                  permanecen relevantes año tras año.
                 </p>
               </div>
             </div>
             <div class="col-md-4">
               <div class="value-card">
                 <div class="value-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  >
+                    <path
+                      d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                    ></path>
                     <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                     <line x1="12" y1="22.08" x2="12" y2="12"></line>
                   </svg>
                 </div>
                 <h3 class="value-title">Diseño Minimalista</h3>
                 <p class="value-description">
-                  Menos es más. Cada detalle tiene un propósito, cada línea está 
-                  cuidadosamente considerada.
+                  Menos es más. Cada detalle tiene un propósito, cada línea está cuidadosamente
+                  considerada.
                 </p>
               </div>
             </div>
             <div class="col-md-4">
               <div class="value-card">
                 <div class="value-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  >
+                    <path
+                      d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"
+                    ></path>
                     <path d="M2 12h20"></path>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    <path
+                      d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                    ></path>
                   </svg>
                 </div>
                 <h3 class="value-title">Sostenibilidad</h3>
                 <p class="value-description">
-                  Comprometidos con prácticas responsables que cuiden nuestro planeta 
-                  y las futuras generaciones.
+                  Comprometidos con prácticas responsables que cuiden nuestro planeta y las futuras
+                  generaciones.
                 </p>
               </div>
             </div>
@@ -140,9 +167,9 @@ onMounted(() => {
           <div class="row g-4">
             <div class="col-md-3 col-sm-6">
               <div class="team-member">
-                <img 
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80" 
-                  alt="Directora Creativa" 
+                <img
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80"
+                  alt="Directora Creativa"
                   class="team-image"
                 />
                 <h4 class="team-name">Ana Martínez</h4>
@@ -151,9 +178,9 @@ onMounted(() => {
             </div>
             <div class="col-md-3 col-sm-6">
               <div class="team-member">
-                <img 
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80" 
-                  alt="Director de Diseño" 
+                <img
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80"
+                  alt="Director de Diseño"
                   class="team-image"
                 />
                 <h4 class="team-name">Carlos Ruiz</h4>
@@ -162,9 +189,9 @@ onMounted(() => {
             </div>
             <div class="col-md-3 col-sm-6">
               <div class="team-member">
-                <img 
-                  src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80" 
-                  alt="Gerente de Producción" 
+                <img
+                  src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80"
+                  alt="Gerente de Producción"
                   class="team-image"
                 />
                 <h4 class="team-name">Laura Sánchez</h4>
@@ -173,9 +200,9 @@ onMounted(() => {
             </div>
             <div class="col-md-3 col-sm-6">
               <div class="team-member">
-                <img 
-                  src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=80" 
-                  alt="Director de Marketing" 
+                <img
+                  src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=80"
+                  alt="Director de Marketing"
                   class="team-image"
                 />
                 <h4 class="team-name">Diego Torres</h4>
@@ -190,8 +217,8 @@ onMounted(() => {
           <div class="visit-content">
             <h2 class="section-title text-center">Visítanos</h2>
             <p class="section-paragraph text-center">
-              Descubre nuestra colección completa en nuestras tiendas físicas. 
-              Nuestro equipo está listo para ayudarte a encontrar las piezas perfectas.
+              Descubre nuestra colección completa en nuestras tiendas físicas. Nuestro equipo está
+              listo para ayudarte a encontrar las piezas perfectas.
             </p>
             <div class="row g-4 mt-4">
               <div class="col-md-6">
@@ -436,15 +463,15 @@ onMounted(() => {
   .hero-title {
     font-size: 2rem;
   }
-  
+
   .content-text {
     padding: 40px 0;
   }
-  
+
   .content-image {
     height: 400px;
   }
-  
+
   .team-image {
     height: 300px;
   }
@@ -454,29 +481,29 @@ onMounted(() => {
   .hero-section {
     padding: 80px 0 60px 0;
   }
-  
+
   .hero-title {
     font-size: 1.75rem;
     letter-spacing: 2px;
   }
-  
+
   .content-section {
     padding: 60px 0;
   }
-  
+
   .content-block {
     margin-bottom: 60px;
   }
-  
+
   .section-title {
     font-size: 1.5rem;
   }
-  
+
   .values-section,
   .team-section {
     margin-bottom: 60px;
   }
-  
+
   .visit-section {
     padding: 60px 0;
   }

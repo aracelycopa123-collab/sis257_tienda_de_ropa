@@ -25,17 +25,16 @@ const formCliente = ref({
   email: '',
   direccion: '',
   ciudad: '',
-  codigoPostal: ''
+  codigoPostal: '',
 })
 
 // Datos de pago
 const formPago = ref({
-  metodoPago: 'tarjeta' as 'efectivo' | 'tarjeta' | 'transferencia' | 'QR',
+  metodoPago: 'tarjeta' as 'tarjeta' | 'transferencia' | 'qr',
   numeroTarjeta: '',
   nombreTarjeta: '',
   fechaExpiracion: '',
   cvv: '',
-  montoPagado: 0
 })
 
 // Estados
@@ -45,12 +44,6 @@ const ventaId = ref<number | null>(null)
 
 // Computed
 const totalCarrito = computed(() => carritoStore.precioTotal)
-const cambio = computed(() => {
-  if (formPago.value.metodoPago === 'efectivo') {
-    return Math.max(0, formPago.value.montoPagado - totalCarrito.value)
-  }
-  return 0
-})
 
 // Validaciones
 const validarPaso1 = (): boolean => {
@@ -105,10 +98,6 @@ const validarPaso2 = (): boolean => {
     } else if (!/^\d{3,4}$/.test(formPago.value.cvv)) {
       errores.value.cvv = 'CVV inválido'
     }
-  } else if (formPago.value.metodoPago === 'efectivo') {
-    if (formPago.value.montoPagado < totalCarrito.value) {
-      errores.value.montoPagado = 'Monto insuficiente'
-    }
   }
 
   return Object.keys(errores.value).length === 0
@@ -156,32 +145,30 @@ const procesarPago = async () => {
       nombre: formCliente.value.nombre,
       apellido: formCliente.value.apellido,
       telefono: formCliente.value.telefono,
-      direccion: `${formCliente.value.direccion}, ${formCliente.value.ciudad}, ${formCliente.value.codigoPostal}`
+      direccion: `${formCliente.value.direccion}, ${formCliente.value.ciudad}, ${formCliente.value.codigoPostal}`,
     })
 
     const clienteId = clienteResponse.data.id
 
     // 2. Crear venta con detalles
-    const detalles = carritoStore.items.map(item => ({
+    const detalles = carritoStore.items.map((item) => ({
       idProducto: item.productoId,
-      cantidad: item.cantidad
+      cantidad: item.cantidad,
     }))
 
     const ventaData = {
       idCliente: clienteId,
       metodoPago: formPago.value.metodoPago,
       detalles: detalles,
-      montoPagado: formPago.value.metodoPago === 'efectivo'
-        ? formPago.value.montoPagado
-        : totalCarrito.value,
-      cambio: cambio.value
+      montoPagado: totalCarrito.value,
+      cambio: 0,
     }
 
     const ventaResponse = await http.post('ventas', ventaData)
     ventaId.value = ventaResponse.data.id
 
     // 3. Simular procesamiento (2 segundos)
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise((resolve) => setTimeout(resolve, 2000))
 
     // 4. Ir a confirmación
     pasoActual.value = 3
@@ -191,10 +178,10 @@ const procesarPago = async () => {
     setTimeout(() => {
       carritoStore.vaciarCarrito()
     }, 1000)
-
   } catch (error: any) {
     console.error('Error al procesar pago:', error)
-    errores.value.general = error.response?.data?.message || 'Error al procesar el pago. Intenta nuevamente.'
+    errores.value.general =
+      error.response?.data?.message || 'Error al procesar el pago. Intenta nuevamente.'
   } finally {
     cargando.value = false
   }
@@ -313,7 +300,7 @@ const volverInicio = () => {
               <span v-if="errores.ciudad" class="error-message">{{ errores.ciudad }}</span>
             </div>
 
-            <div class="form-group">
+            <!--<div class="form-group">
               <label class="form-label">Código Postal</label>
               <input
                 v-model="formCliente.codigoPostal"
@@ -321,7 +308,7 @@ const volverInicio = () => {
                 class="form-input"
                 placeholder="0000"
               />
-            </div>
+            </div>-->
           </div>
         </div>
 
@@ -332,17 +319,18 @@ const volverInicio = () => {
           <!-- Selector de Método -->
           <div class="payment-methods">
             <label
-              v-for="metodo in ['tarjeta', 'efectivo', 'transferencia', 'qr']"
+              v-for="metodo in ['tarjeta', 'transferencia', 'qr']"
               :key="metodo"
               class="payment-method"
             >
-              <input
-                type="radio"
-                v-model="formPago.metodoPago"
-                :value="metodo"
-                name="metodoPago"
-              />
-              <span class="method-label">{{ metodo === 'tarjeta' ? 'Tarjeta de Crédito/Débito' : metodo === 'efectivo' ? 'Efectivo' : metodo === 'transferencia' ? 'Transferencia Bancaria' : 'QR' }}</span>
+              <input type="radio" v-model="formPago.metodoPago" :value="metodo" name="metodoPago" />
+              <span class="method-label">{{
+                metodo === 'tarjeta'
+                  ? 'Tarjeta de Crédito/Débito'
+                  : metodo === 'transferencia'
+                    ? 'Transferencia Bancaria'
+                    : 'QR'
+              }}</span>
             </label>
           </div>
 
@@ -359,7 +347,9 @@ const volverInicio = () => {
                 placeholder="1234 5678 9012 3456"
                 maxlength="19"
               />
-              <span v-if="errores.numeroTarjeta" class="error-message">{{ errores.numeroTarjeta }}</span>
+              <span v-if="errores.numeroTarjeta" class="error-message">{{
+                errores.numeroTarjeta
+              }}</span>
             </div>
 
             <div class="form-group full-width">
@@ -372,7 +362,9 @@ const volverInicio = () => {
                 placeholder="JUAN PEREZ"
                 style="text-transform: uppercase"
               />
-              <span v-if="errores.nombreTarjeta" class="error-message">{{ errores.nombreTarjeta }}</span>
+              <span v-if="errores.nombreTarjeta" class="error-message">{{
+                errores.nombreTarjeta
+              }}</span>
             </div>
 
             <div class="form-grid-half">
@@ -387,7 +379,9 @@ const volverInicio = () => {
                   placeholder="MM/YY"
                   maxlength="5"
                 />
-                <span v-if="errores.fechaExpiracion" class="error-message">{{ errores.fechaExpiracion }}</span>
+                <span v-if="errores.fechaExpiracion" class="error-message">{{
+                  errores.fechaExpiracion
+                }}</span>
               </div>
 
               <div class="form-group">
@@ -405,30 +399,25 @@ const volverInicio = () => {
             </div>
           </div>
 
-          <!-- Formulario de Efectivo -->
-          <div v-if="formPago.metodoPago === 'efectivo'" class="payment-form">
-            <div class="form-group">
-              <label class="form-label">Monto a Pagar (Bs)</label>
-              <input
-                v-model.number="formPago.montoPagado"
-                type="number"
-                class="form-input"
-                :class="{ error: errores.montoPagado }"
-                :placeholder="`Mínimo: ${totalCarrito.toFixed(2)} Bs`"
-                step="0.01"
-              />
-              <span v-if="errores.montoPagado" class="error-message">{{ errores.montoPagado }}</span>
-            </div>
-
-            <div v-if="cambio > 0" class="cambio-info">
-              <span class="cambio-label">Cambio:</span>
-              <span class="cambio-value">{{ cambio.toFixed(2) }} Bs</span>
-            </div>
+          <!-- Mensaje para otros métodos -->
+          <div
+            v-if="formPago.metodoPago === 'transferencia' || formPago.metodoPago === 'qr'"
+            class="info-message"
+          >
+            <p>
+              Los datos para realizar la {{ formPago.metodoPago }} se enviarán por correo
+              electrónico.
+            </p>
           </div>
 
-          <!-- Mensaje para otros métodos -->
-          <div v-if="formPago.metodoPago === 'transferencia' || formPago.metodoPago === 'QR'" class="info-message">
-            <p>Los datos para realizar la {{ formPago.metodoPago }} se enviarán por correo electrónico.</p>
+          <!-- Formulario de QR -->
+          <div v-if="formPago.metodoPago === 'qr'" class="payment-form qr-form">
+            <div class="qr-container">
+              <img src="@/assets/img/qr-payment.jpg" alt="Código QR de pago" class="qr-image" />
+              <p class="qr-instruction">
+                Escanea este código QR con tu aplicación bancaria para realizar el pago
+              </p>
+            </div>
           </div>
 
           <div v-if="errores.general" class="error-message general">{{ errores.general }}</div>
@@ -437,22 +426,25 @@ const volverInicio = () => {
         <!-- Paso 3: Confirmación -->
         <div v-if="pasoActual === 3" class="checkout-step confirmation">
           <div class="success-icon">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 6L9 17l-5-5"/>
+            <svg
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M20 6L9 17l-5-5" />
             </svg>
           </div>
 
           <h2 class="success-title">¡Pedido Confirmado!</h2>
-          <p class="success-message">
-            Tu pedido #{{ ventaId }} ha sido procesado exitosamente.
-          </p>
+          <p class="success-message">Tu pedido #{{ ventaId }} ha sido procesado exitosamente.</p>
           <p class="success-submessage">
             Recibirás un email de confirmación con los detalles del envío.
           </p>
 
-          <button @click="volverInicio" class="btn-primary">
-            Volver al Inicio
-          </button>
+          <button @click="volverInicio" class="btn-primary">Volver al Inicio</button>
         </div>
 
         <!-- Resumen del Pedido (Sidebar) -->
@@ -467,7 +459,9 @@ const volverInicio = () => {
                 <p class="summary-item-details">{{ item.talla }} · {{ item.color }}</p>
                 <p class="summary-item-qty">Cantidad: {{ item.cantidad }}</p>
               </div>
-              <span class="summary-item-price">{{ (item.precio * item.cantidad).toFixed(2) }} Bs</span>
+              <span class="summary-item-price"
+                >{{ (item.precio * item.cantidad).toFixed(2) }} Bs</span
+              >
             </div>
           </div>
 
@@ -490,9 +484,7 @@ const volverInicio = () => {
 
       <!-- Botones de Navegación -->
       <div v-if="pasoActual < 3" class="checkout-actions">
-        <button v-if="pasoActual > 1" @click="pasoAnterior" class="btn-secondary">
-          Volver
-        </button>
+        <button v-if="pasoActual > 1" @click="pasoAnterior" class="btn-secondary">Volver</button>
         <button @click="siguientePaso" class="btn-primary" :disabled="cargando">
           <span v-if="!cargando">{{ pasoActual === 2 ? 'Confirmar Pago' : 'Continuar' }}</span>
           <span v-else>Procesando...</span>
@@ -732,7 +724,7 @@ const volverInicio = () => {
   border-color: #000000;
 }
 
-.payment-method input[type="radio"] {
+.payment-method input[type='radio'] {
   width: 18px;
   height: 18px;
   cursor: pointer;
@@ -1029,5 +1021,34 @@ const volverInicio = () => {
   .order-summary {
     padding: 20px;
   }
+}
+
+/* QR Payment Form */
+.qr-form {
+  display: flex;
+  justify-content: center;
+}
+
+.qr-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.qr-image {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #e5e5e5;
+  padding: 10px;
+  background: #ffffff;
+}
+
+.qr-instruction {
+  font-size: 0.875rem;
+  color: #666666;
+  text-align: center;
+  margin: 0;
+  letter-spacing: 0.3px;
 }
 </style>

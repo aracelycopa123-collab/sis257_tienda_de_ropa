@@ -9,21 +9,21 @@ const authStore = useAuthStore()
   <nav class="navbar navbar-expand-lg navbar-light bg-white">
     <div class="container-fluid px-5">
       <RouterLink to="/dashboard" class="navbar-brand">
-        <span class="brand-text">MAJESTIC</span>
+        <span class="brand-text"></span>
       </RouterLink>
-      
-      <button 
-        class="navbar-toggler border-0" 
-        type="button" 
-        data-bs-toggle="collapse" 
-        data-bs-target="#navbarNav" 
-        aria-controls="navbarNav" 
-        aria-expanded="false" 
+
+      <button
+        class="navbar-toggler border-0"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
         aria-label="Toggle navigation"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      
+
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
           <li class="nav-item">
@@ -42,15 +42,11 @@ const authStore = useAuthStore()
             <RouterLink to="/ventas" class="nav-link">Ventas</RouterLink>
           </li>
         </ul>
-        
+
         <div class="d-flex align-items-center gap-4">
-          <RouterLink to="/" class="btn-home">
-            Ir al Inicio
-          </RouterLink>
+          <RouterLink to="/" class="btn-home"> Ir al Inicio </RouterLink>
           <span class="user-name">{{ authStore.user }}</span>
-          <button @click="authStore.logout()" class="btn-logout">
-            Salir
-          </button>
+          <button @click="authStore.logout()" class="btn-logout">Salir</button>
         </div>
       </div>
     </div>
@@ -190,15 +186,15 @@ const authStore = useAuthStore()
     padding-top: 20px;
     border-top: 1px solid #e5e5e5;
   }
-  
+
   .nav-link {
     padding: 12px 0 !important;
   }
-  
+
   .nav-link.router-link-active::after {
     left: 0;
   }
-  
+
   .d-flex {
     margin-top: 20px;
     padding-top: 20px;

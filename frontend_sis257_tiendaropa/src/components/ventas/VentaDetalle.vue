@@ -51,38 +51,37 @@ const formatearFecha = (fecha: string): string => {
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 }
 
 const getMetodoPagoLabel = (metodo: string): string => {
   const metodos: Record<string, string> = {
-    'efectivo': 'Efectivo',
-    'tarjeta': 'Tarjeta de Crédito/Débito',
-    'transferencia': 'Transferencia Bancaria',
-    'qr': 'Código QR',
-    'cotización': 'Cotización',
-    'otro': 'Otro'
+    tarjeta: 'Tarjeta de Crédito/Débito',
+    transferencia: 'Transferencia Bancaria',
+    qr: 'Código QR',
+    cotización: 'Cotización',
+    otro: 'Otro',
   }
   return metodos[metodo] || metodo
 }
 
 const getEstadoClass = (estado: string): string => {
   const estados: Record<string, string> = {
-    'realizada': 'badge-success',
-    'pendiente': 'badge-warning',
-    'anulada': 'badge-danger',
-    'cancelada': 'badge-danger'
+    realizada: 'badge-success',
+    pendiente: 'badge-warning',
+    anulada: 'badge-danger',
+    cancelada: 'badge-danger',
   }
   return estados[estado] || 'badge-default'
 }
 
 const getEstadoLabel = (estado: string): string => {
   const labels: Record<string, string> = {
-    'realizada': 'Confirmada',
-    'pendiente': 'Pendiente',
-    'anulada': 'Anulada',
-    'cancelada': 'Cancelada'
+    realizada: 'Confirmada',
+    pendiente: 'Pendiente',
+    anulada: 'Anulada',
+    cancelada: 'Cancelada',
   }
   return labels[estado] || estado
 }
@@ -105,7 +104,14 @@ const cantidadTotalProductos = computed(() => {
               <p class="modal-subtitle">{{ formatearFecha(venta.fechaCreacion) }}</p>
             </div>
             <button @click="emit('close')" class="btn-close">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
                 <path d="M15 5L5 15M5 5l10 10" />
               </svg>
             </button>
@@ -119,7 +125,9 @@ const cantidadTotalProductos = computed(() => {
               <div class="info-grid">
                 <div class="info-item">
                   <span class="info-label">Nombre</span>
-                  <span class="info-value">{{ venta.cliente.nombre }} {{ venta.cliente.apellido }}</span>
+                  <span class="info-value"
+                    >{{ venta.cliente.nombre }} {{ venta.cliente.apellido }}</span
+                  >
                 </div>
                 <div class="info-item" v-if="venta.cliente.telefono">
                   <span class="info-label">Teléfono</span>
@@ -161,7 +169,11 @@ const cantidadTotalProductos = computed(() => {
             <section class="info-section products-section">
               <h3 class="section-title">Productos ({{ cantidadTotalProductos }} items)</h3>
               <div class="products-list">
-                <article v-for="detalle in venta.ventadetalles" :key="detalle.id" class="product-card">
+                <article
+                  v-for="detalle in venta.ventadetalles"
+                  :key="detalle.id"
+                  class="product-card"
+                >
                   <div class="product-image">
                     <img :src="detalle.producto.imagenes" :alt="detalle.producto.nombre" />
                   </div>
@@ -170,12 +182,12 @@ const cantidadTotalProductos = computed(() => {
                     <div class="product-details">
                       <span class="product-qty">Cantidad: {{ detalle.cantidad }}</span>
                       <span class="product-separator">·</span>
-                      <span class="product-price">{{ Number(detalle.precioUnitario).toFixed(2) }} Bs c/u</span>
+                      <span class="product-price"
+                        >{{ Number(detalle.precioUnitario).toFixed(2) }} Bs c/u</span
+                      >
                     </div>
                   </div>
-                  <div class="product-subtotal">
-                    {{ Number(detalle.subtotal).toFixed(2) }} Bs
-                  </div>
+                  <div class="product-subtotal">{{ Number(detalle.subtotal).toFixed(2) }} Bs</div>
                 </article>
               </div>
             </section>

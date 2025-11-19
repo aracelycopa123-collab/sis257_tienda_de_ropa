@@ -69,38 +69,37 @@ const formatearFecha = (fecha: string): string => {
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 }
 
 const getEstadoClass = (estado: string): string => {
   const estados: Record<string, string> = {
-    'realizada': 'badge-success',
-    'pendiente': 'badge-warning',
-    'anulada': 'badge-danger',
-    'cancelada': 'badge-danger'
+    realizada: 'badge-success',
+    pendiente: 'badge-warning',
+    anulada: 'badge-danger',
+    cancelada: 'badge-danger',
   }
   return estados[estado] || 'badge-default'
 }
 
 const getEstadoLabel = (estado: string): string => {
   const labels: Record<string, string> = {
-    'realizada': 'Confirmada',
-    'pendiente': 'Pendiente',
-    'anulada': 'Anulada',
-    'cancelada': 'Cancelada'
+    realizada: 'Confirmada',
+    pendiente: 'Pendiente',
+    anulada: 'Anulada',
+    cancelada: 'Cancelada',
   }
   return labels[estado] || estado
 }
 
 const getMetodoPagoLabel = (metodo: string): string => {
   const metodos: Record<string, string> = {
-    'efectivo': 'Efectivo',
-    'tarjeta': 'Tarjeta',
-    'transferencia': 'Transferencia',
-    'qr': 'QR',
-    'cotización': 'Cotización',
-    'otro': 'Otro'
+    tarjeta: 'Tarjeta',
+    transferencia: 'Transferencia',
+    qr: 'QR',
+    cotización: 'Cotización',
+    otro: 'Otro',
   }
   return metodos[metodo] || metodo
 }
@@ -161,7 +160,14 @@ onMounted(() => cargarVentas())
             <td class="items-cell">{{ venta.ventadetalles?.length || 0 }} items</td>
             <td class="actions-cell">
               <button @click="abrirDetalle(venta)" class="btn-detail" title="Ver detalle">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                   <circle cx="12" cy="12" r="3"></circle>
                 </svg>
@@ -172,11 +178,22 @@ onMounted(() => cargarVentas())
           <tr v-if="ventas.length === 0">
             <td colspan="8" class="empty-cell">
               <div class="empty-state">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                  <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                <svg
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1"
+                >
+                  <path
+                    d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+                  />
                 </svg>
                 <p class="empty-message">No hay ventas registradas</p>
-                <p class="empty-submessage">Las ventas realizadas desde el checkout aparecerán aquí</p>
+                <p class="empty-submessage">
+                  Las ventas realizadas desde el checkout aparecerán aquí
+                </p>
               </div>
             </td>
           </tr>
@@ -190,33 +207,33 @@ onMounted(() => cargarVentas())
 </template>
 
 <style scoped>
-.list-container { 
-  background: #ffffff; 
-  min-height: calc(100vh - 140px); 
+.list-container {
+  background: #ffffff;
+  min-height: calc(100vh - 140px);
 }
 
-.list-header { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: flex-start; 
-  padding: 30px 0; 
-  border-bottom: 1px solid #e5e5e5; 
-  margin-bottom: 30px; 
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 30px 0;
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 30px;
 }
 
-.page-title { 
-  font-size: 2rem; 
-  font-weight: 300; 
-  letter-spacing: -0.5px; 
-  color: #000000; 
-  margin-bottom: 8px; 
+.page-title {
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: -0.5px;
+  color: #000000;
+  margin-bottom: 8px;
 }
 
-.page-subtitle { 
-  font-size: 0.875rem; 
-  color: #666666; 
-  letter-spacing: 0.3px; 
-  margin: 0; 
+.page-subtitle {
+  font-size: 0.875rem;
+  color: #666666;
+  letter-spacing: 0.3px;
+  margin: 0;
 }
 
 /* Loading State */
@@ -239,7 +256,9 @@ onMounted(() => cargarVentas())
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-text {
@@ -249,47 +268,47 @@ onMounted(() => cargarVentas())
 }
 
 /* Table */
-.table-wrapper { 
-  overflow-x: auto; 
+.table-wrapper {
+  overflow-x: auto;
 }
 
-.data-table { 
-  width: 100%; 
-  border-collapse: collapse; 
-  font-size: 0.875rem; 
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
 }
 
-.data-table thead { 
-  border-bottom: 1px solid #e5e5e5; 
+.data-table thead {
+  border-bottom: 1px solid #e5e5e5;
 }
 
-.data-table th { 
-  padding: 16px 20px; 
-  text-align: left; 
-  font-weight: 400; 
-  font-size: 0.75rem; 
-  color: #666666; 
-  text-transform: uppercase; 
-  letter-spacing: 1px; 
+.data-table th {
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: #666666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.data-table tbody tr { 
-  border-bottom: 1px solid #f5f5f5; 
-  transition: background 0.2s ease; 
+.data-table tbody tr {
+  border-bottom: 1px solid #f5f5f5;
+  transition: background 0.2s ease;
 }
 
-.data-table tbody tr:hover { 
-  background: #fafafa; 
+.data-table tbody tr:hover {
+  background: #fafafa;
 }
 
-.data-table td { 
-  padding: 20px; 
-  color: #000000; 
-  vertical-align: middle; 
+.data-table td {
+  padding: 20px;
+  color: #000000;
+  vertical-align: middle;
 }
 
-.data-table td.fw-medium { 
-  font-weight: 500; 
+.data-table td.fw-medium {
+  font-weight: 500;
 }
 
 .id-cell {
@@ -337,9 +356,9 @@ onMounted(() => cargarVentas())
   height: 14px;
 }
 
-.price { 
-  font-weight: 500; 
-  font-size: 0.9375rem; 
+.price {
+  font-weight: 500;
+  font-size: 0.9375rem;
 }
 
 /* Badge */
@@ -408,15 +427,15 @@ onMounted(() => cargarVentas())
 }
 
 /* Responsive */
-@media (max-width: 768px) { 
-  .page-title { 
-    font-size: 1.5rem; 
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.5rem;
   }
-  
+
   .table-wrapper {
     overflow-x: scroll;
   }
-  
+
   .data-table {
     min-width: 800px;
   }

@@ -11,21 +11,21 @@ const authStore = useAuthStore()
   <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white">
     <div class="container-fluid px-5">
       <RouterLink to="/" class="navbar-brand">
-        <span class="brand-text">MAJESTIC</span>
+        <span class="brand-text">ROMA</span>
       </RouterLink>
-      
-      <button 
-        class="navbar-toggler border-0" 
-        type="button" 
-        data-bs-toggle="collapse" 
-        data-bs-target="#navbarSupportedContent" 
-        aria-controls="navbarSupportedContent" 
-        aria-expanded="false" 
+
+      <button
+        class="navbar-toggler border-0"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
         aria-label="Toggle navigation"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      
+
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
           <li class="nav-item">
@@ -38,25 +38,23 @@ const authStore = useAuthStore()
             <RouterLink to="/blog" class="nav-link">Blog</RouterLink>
           </li>
         </ul>
-        
+
         <div class="navbar-actions">
           <!-- Carrito Widget -->
           <CarritoWidget />
-          
+
           <!-- Botón de Login cuando NO está logueado -->
           <RouterLink v-if="!authStore.token" to="/login" class="btn-login">
             Iniciar Sesión
           </RouterLink>
-          
+
           <!-- Botón de Ir al Panel cuando SÍ está logueado -->
-          <RouterLink v-else to="/dashboard" class="btn-panel">
-            Ir al Panel
-          </RouterLink>
+          <RouterLink v-else to="/dashboard" class="btn-panel"> Ir al Panel </RouterLink>
         </div>
       </div>
     </div>
   </nav>
-  
+
   <!-- Carrito Flotante (Sidebar) -->
   <CarritoFlotante />
 </template>
@@ -179,21 +177,21 @@ const authStore = useAuthStore()
     padding-top: 20px;
     border-top: 1px solid #e5e5e5;
   }
-  
+
   .nav-link {
     padding: 12px 0 !important;
   }
-  
+
   .nav-link.router-link-active::after {
     left: 0;
   }
-  
+
   .navbar-actions {
     margin-top: 20px;
     padding-top: 20px;
     border-top: 1px solid #e5e5e5;
   }
-  
+
   .btn-login {
     width: 100%;
     text-align: center;
