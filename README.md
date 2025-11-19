@@ -2,7 +2,7 @@
 
 ## Descripción inicial del negocio
 
-La **Tienda de Ropa “Moda Urbana”** es un negocio dedicado a la venta de prendas de vestir para hombres, mujeres y niños.  
+La **Tienda de Ropa “MAJESTIC”** es un negocio dedicado a la venta de prendas de vestir para hombres.  
 El objetivo del sistema es automatizar la gestión de productos, controlar el inventario y facilitar el proceso de compra para los clientes.  
 
 El sistema permitirá a los administradores registrar y actualizar información sobre los productos, tallas, colores y categorías.  
