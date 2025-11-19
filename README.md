@@ -2,13 +2,11 @@
 
 ## Descripción inicial del negocio
 
-La **Tienda de Ropa “ROMA”** es un negocio dedicado a la venta de prendas de vestir para hombres, mujeres, niños.  
+La **Tienda de Ropa “ROMA”** es un negocio dedicado a la venta de prendas de vestir para hombres, mujeres, niños realiza ventas online.  
 El objetivo del sistema es automatizar la gestión de productos, controlar el inventario y facilitar el proceso de compra para los clientes.  
 
 El sistema permitirá a los administradores registrar y actualizar información sobre los productos, tallas, colores y categorías.  
 También contará con una funcionalidad de venta, donde los clientes podrán realizar pedidos, y el sistema calculará los totales y actualizará el stock de los productos.
-
-Este proyecto busca digitalizar los procesos principales del negocio, mejorando la organización, el control y la eficiencia en las ventas.
 
 ## Entidades y campos tentativos
 
