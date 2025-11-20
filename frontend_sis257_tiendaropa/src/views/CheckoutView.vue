@@ -413,7 +413,7 @@ const volverInicio = () => {
           <!-- Formulario de QR -->
           <div v-if="formPago.metodoPago === 'qr'" class="payment-form qr-form">
             <div class="qr-container">
-              <img src="@/assets/img/qr-payment.jpg" alt="Código QR de pago" class="qr-image" />
+              <img src="@/assets/img/gallery/qr.png" alt="Código QR de pago" class="qr-image" />
               <p class="qr-instruction">
                 Escanea este código QR con tu aplicación bancaria para realizar el pago
               </p>
