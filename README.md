@@ -79,7 +79,7 @@ se describen las entidades iniciales del sistema y los campos que podrían forma
 
 ### EstadoVenta
 - id_estado
-.nombre (pendiente, pagado, enviado, entregado, cancelado)
+- nombre (pendiente, pagado, enviado, entregado, cancelado)
 
 ### Notificacion 
 - id_notificacion
