@@ -48,6 +48,7 @@ se describen las entidades iniciales del sistema y los campos que podrían forma
 - fecha_venta  
 - total  
 - metodo_pago
+- id_estado (FK)
 
 ### DetalleVenta
 - id_DetalleVenta(PK)  
@@ -61,6 +62,32 @@ se describen las entidades iniciales del sistema y los campos que podrían forma
 - id_Usuario
 - id_Producto 
 - Cantidad
+
+### Devolucion
+- id_devolucion
+- id_venta
+- motivo
+- fecha
+- total_devuelto
+  
+### DetalleDevolucion
+- id_detalle_devolucion
+- id_devolucion
+- id_variante
+- cantidad
+- precio
+
+### EstadoVenta
+- id_estado
+.nombre (pendiente, pagado, enviado, entregado, cancelado)
+
+### Notificacion 
+- id_notificacion
+- mensaje
+- tipo (stock_bajo, venta, ajuste, compra)
+- id_usuario
+- visto (sí/no)
+- fecha
 
 
 
