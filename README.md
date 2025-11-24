@@ -81,11 +81,6 @@ se describen las entidades iniciales del sistema y los campos que podrían forma
 - id_estado
 - nombre (pendiente, pagado, enviado, entregado, cancelado)
 
-### Notificacion 
-- id_notificacion
-- mensaje
-- tipo (stock_bajo, venta, ajuste, compra)
-- id_usuario
 
   
 
