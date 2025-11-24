@@ -27,8 +27,12 @@ export class ProductosService {
     producto.descripcion = createProductoDto.descripcion.trim();
     producto.precio = createProductoDto.precio;
     producto.stock = createProductoDto.stock;
-    producto.talla = createProductoDto.talla;
-    producto.color = createProductoDto.color;
+    producto.tallas = Array.isArray(createProductoDto.tallas)
+      ? createProductoDto.tallas.map((t) => String(t))
+      : [];
+    producto.colores = Array.isArray(createProductoDto.colores)
+      ? createProductoDto.colores.map((id) => String(id))
+      : [];
     producto.imagenes = createProductoDto.imagenes;
     producto.idCategoria = createProductoDto.idCategoria;
     return this.productosRepository.save(producto);
@@ -52,6 +56,12 @@ export class ProductosService {
     updateProductoDto: UpdateProductoDto,
   ): Promise<Producto> {
     const producto = await this.findOne(id);
+    if ((updateProductoDto as any).tallas) {
+      producto.tallas = (updateProductoDto as any).tallas.map((t) => String(t));
+    }
+    if ((updateProductoDto as any).colores) {
+      producto.colores = (updateProductoDto as any).colores.map((id) => String(id));
+    }
     const productoUpdate = Object.assign(producto, updateProductoDto);
     return this.productosRepository.save(productoUpdate);
   }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Matches, MaxLength, IsOptional } from 'class-validator';
+import { IsString, Matches, MaxLength, IsOptional, IsNumber } from 'class-validator';
 
 export class CreateClienteDto {
   @ApiProperty({
@@ -43,4 +43,12 @@ export class CreateClienteDto {
     message: 'El campo direccion no debe ser mayor a 50 caracteres',
   })
   direccion?: string;
+
+  @ApiProperty({
+    example: 1,
+    description: 'ID del usuario asociado al cliente (si ya existe una cuenta)',
+  })
+  @IsOptional()
+  @IsNumber({}, { message: 'El campo idUsuario debe ser numérico' })
+  idUsuario?: number;
 }

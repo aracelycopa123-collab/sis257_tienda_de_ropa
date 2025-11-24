@@ -29,11 +29,11 @@ export class Producto {
   @Column()
   stock: number;
 
-  @Column()
-  talla: string;
+  @Column('simple-array', { nullable: true })
+  tallas: string[];
 
-  @Column()
-  color: string;
+  @Column('simple-array', { name: 'colores', nullable: true })
+  colores: string[];
 
   @Column({ type: 'varchar', length: 20, default: 'unisex' })
   genero: string;

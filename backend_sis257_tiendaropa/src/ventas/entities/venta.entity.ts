@@ -65,7 +65,7 @@ export class Venta {
   cambio: number | null;
 
   //  muchas ventas puede realizar  un cliente
-  @ManyToOne(() => Cliente, (cliente) => cliente.venta)
+  @ManyToOne(() => Cliente, (cliente) => cliente.ventas)
   @JoinColumn({ name: 'id_cliente', referencedColumnName: 'id' })
   cliente: Cliente;
 

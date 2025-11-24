@@ -26,6 +26,20 @@ const useAuthStore = defineStore('auth', {
         return false
       }
     },
+    async register(payload: any) {
+      try {
+        const response = await http.post('auth/register', payload)
+        // response contains usuario, cliente and access_token
+        this.token = response.data.access_token
+        if (this.token) localStorage.setItem('token', this.token)
+        this.user = response.data.usuario?.nombreUsuario || ''
+        if (this.user) localStorage.setItem('user', this.user)
+        return true
+      } catch (error) {
+        console.error(error)
+        return false
+      }
+    },
     logout() {
       localStorage.clear()
       this.$reset()

@@ -28,6 +28,22 @@ export class UsuariosService {
     return this.usuariosRepository.save(usuario);
   }
 
+  // Create a usuario and set the provided password (used by registration flow)
+  async createWithPassword(
+    nombreUsuario: string,
+    clave: string,
+  ): Promise<Usuario> {
+    const existe = await this.usuariosRepository.findOneBy({
+      nombreUsuario: nombreUsuario.trim(),
+    });
+    if (existe) throw new ConflictException('El usuario ya existe');
+
+    const usuario = new Usuario();
+    usuario.nombreUsuario = nombreUsuario.trim();
+    usuario.clave = clave ?? (process.env.DEFAULT_PASSWORD ?? '');
+    return this.usuariosRepository.save(usuario);
+  }
+
   async findAll(): Promise<Usuario[]> {
     return this.usuariosRepository.find();
   }

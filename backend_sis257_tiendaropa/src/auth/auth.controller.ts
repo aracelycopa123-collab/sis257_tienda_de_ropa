@@ -2,6 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthLoginDto } from './dto/auth-login.dto';
+import { AuthRegisterDto } from './dto/auth-register.dto';
 
 @ApiTags('auth')
 @ApiBearerAuth()
@@ -13,5 +14,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(@Body() authLoginDto: AuthLoginDto): Promise<any> {
     return this.authService.login(authLoginDto);
+  }
+
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  async register(@Body() authRegisterDto: AuthRegisterDto): Promise<any> {
+    return this.authService.register(authRegisterDto);
   }
 }

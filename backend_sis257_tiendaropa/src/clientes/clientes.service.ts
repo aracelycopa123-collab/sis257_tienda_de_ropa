@@ -21,6 +21,9 @@ export class ClientesService {
     cliente.apellido = createClienteDto.apellido?.trim();
     cliente.telefono = createClienteDto.telefono?.trim();
     cliente.direccion = createClienteDto.direccion?.trim();
+    if (createClienteDto.idUsuario) {
+      cliente.idUsuario = createClienteDto.idUsuario;
+    }
     return this.clientesRepository.save(cliente);
   }
 
@@ -28,8 +31,26 @@ export class ClientesService {
     return this.clientesRepository.find();
   }
 
+  async findByUsuario(idUsuario: number): Promise<Cliente> {
+    const cliente = await this.clientesRepository
+      .createQueryBuilder('cliente')
+      .leftJoinAndSelect('cliente.usuario', 'usuario')
+      .leftJoinAndSelect('cliente.ventas', 'ventas')
+      .where('cliente.id_usuario = :idUsuario', { idUsuario })
+      .orderBy('ventas.fecha_creacion', 'DESC')
+      .getOne();
+    if (!cliente) throw new NotFoundException('El cliente no existe');
+    return cliente;
+  }
+
   async findOne(id: number): Promise<Cliente> {
-    const cliente = await this.clientesRepository.findOneBy({ id });
+    const cliente = await this.clientesRepository
+      .createQueryBuilder('cliente')
+      .leftJoinAndSelect('cliente.usuario', 'usuario')
+      .leftJoinAndSelect('cliente.ventas', 'ventas')
+      .where('cliente.id = :id', { id })
+      .orderBy('ventas.fecha_creacion', 'DESC')
+      .getOne();
     if (!cliente) throw new NotFoundException('El cliente no existe');
     return cliente;
   }
@@ -42,6 +63,10 @@ export class ClientesService {
 
   async remove(id: number) {
     const cliente = await this.findOne(id);
-    if (cliente) return this.clientesRepository.softRemove(cliente);
+    if (!cliente) throw new NotFoundException('El cliente no existe');
+    if (cliente.ventas && cliente.ventas.length > 0) {
+      throw new ConflictException('El cliente tiene al menos un pedido y no puede ser eliminado');
+    }
+    return this.clientesRepository.softRemove(cliente);
   }
 }

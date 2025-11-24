@@ -5,6 +5,8 @@ import {
   MaxLength,
   IsNumber,
   Min,
+  IsArray,
+  ArrayNotEmpty,
 } from 'class-validator';
 
 export class CreateProductoDto {
@@ -49,20 +51,24 @@ export class CreateProductoDto {
   readonly stock: number;
 
   @ApiProperty({
-    example: 'M',
-    description: 'Talla del producto',
+    example: ['S', 'M', 'L'],
+    description: 'Tallas disponibles del producto (array)',
+    type: [String],
   })
-  @IsNotEmpty({ message: 'El campo talla es obligatorio' })
-  @IsString({ message: 'La talla debe ser de tipo cadena' })
-  readonly talla: string;
+  @IsArray({ message: 'El campo tallas debe ser un arreglo' })
+  @ArrayNotEmpty({ message: 'El campo tallas no debe estar vacío' })
+  @IsString({ each: true, message: 'Cada talla debe ser de tipo cadena' })
+  readonly tallas: string[];
 
   @ApiProperty({
-    example: 'Rojo',
-    description: 'Color del producto',
+    example: [1, 2],
+    description: 'IDs de los colores asociados al producto',
+    type: [Number],
   })
-  @IsNotEmpty({ message: 'El campo color es obligatorio' })
-  @IsString({ message: 'El color debe ser de tipo cadena' })
-  readonly color: string;
+  @IsArray({ message: 'El campo colores debe ser un arreglo de ids' })
+  @ArrayNotEmpty({ message: 'El campo colores no debe estar vacío' })
+  @IsNumber({}, { each: true, message: 'Cada id de color debe ser numérico' })
+  readonly colores: number[];
 
   @ApiProperty({
     example: 'hombre',

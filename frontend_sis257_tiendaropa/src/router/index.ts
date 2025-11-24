@@ -32,6 +32,16 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue'),
     },
     {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue'),
+    },
+    {
+      path: '/perfil',
+      name: 'perfil',
+      component: () => import('../views/ProfileView.vue'),
+    },
+    {
       path: '/categorias',
       name: 'categorias',
       component: () => import('../views/CategoriasView.vue'),
@@ -65,11 +75,12 @@ router.beforeEach(async (to) => {
   const protectedPages: string[] = [
     '/dashboard',
     '/categorias',
-    '/productos', 
+    '/productos',
     '/clientes',
-    '/ventas'
+    '/ventas',
+    '/perfil'
   ]
-  
+
   const authRequired = protectedPages.some(page => to.path.startsWith(page))
   const authStore = useAuthStore()
 

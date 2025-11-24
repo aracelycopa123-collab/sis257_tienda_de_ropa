@@ -6,7 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ClientesService } from './clientes.service';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
@@ -23,6 +26,18 @@ export class ClientesController {
   @Get()
   findAll() {
     return this.clientesService.findAll();
+  }
+
+  @Get('by-usuario/:id')
+  findByUsuario(@Param('id') id: string) {
+    return this.clientesService.findByUsuario(+id);
+  }
+
+  @Get('me')
+  @UseGuards(AuthGuard('jwt'))
+  me(@Req() req: any) {
+    const usuario = req.user;
+    return this.clientesService.findByUsuario(usuario.id);
   }
 
   @Get(':id')

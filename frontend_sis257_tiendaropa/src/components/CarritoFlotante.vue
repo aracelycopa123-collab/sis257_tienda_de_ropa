@@ -1,9 +1,26 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useCarritoStore } from '@/stores'
+import { watch, onUnmounted } from 'vue'
 
 const router = useRouter()
 const carritoStore = useCarritoStore()
+
+// Evitar scroll del body cuando el carrito está abierto
+watch(
+  () => carritoStore.isOpen,
+  (open) => {
+    if (open) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+  },
+)
+
+onUnmounted(() => {
+  document.body.style.overflow = ''
+})
 
 const formatoPrecio = (precio: number) => {
   return precio.toFixed(2)
@@ -18,9 +35,9 @@ const irACheckout = () => {
 <template>
   <!-- Overlay -->
   <Transition name="overlay">
-    <div 
-      v-if="carritoStore.isOpen" 
-      class="cart-overlay" 
+    <div
+      v-if="carritoStore.isOpen"
+      class="cart-overlay"
       @click="carritoStore.cerrarCarrito()"
     ></div>
   </Transition>
@@ -68,16 +85,16 @@ const irACheckout = () => {
 
               <!-- Quantity Controls -->
               <div class="item-controls">
-                <button 
-                  @click="carritoStore.decrementarCantidad(item.id)" 
+                <button
+                  @click="carritoStore.decrementarCantidad(item.id)"
                   class="qty-btn"
                   :disabled="item.cantidad <= 1"
                 >
                   −
                 </button>
                 <span class="qty-value">{{ item.cantidad }}</span>
-                <button 
-                  @click="carritoStore.incrementarCantidad(item.id)" 
+                <button
+                  @click="carritoStore.incrementarCantidad(item.id)"
                   class="qty-btn"
                   :disabled="item.cantidad >= item.stock"
                 >

@@ -44,12 +44,17 @@ const authStore = useAuthStore()
           <CarritoWidget />
 
           <!-- Botón de Login cuando NO está logueado -->
-          <RouterLink v-if="!authStore.token" to="/login" class="btn-login">
-            Iniciar Sesión
-          </RouterLink>
+          <div v-if="!authStore.token" style="display:flex;gap:8px;align-items:center">
+            <RouterLink to="/login" class="btn-login">Iniciar Sesión</RouterLink>
+            <RouterLink to="/register" class="btn-register">Registrarse</RouterLink>
+          </div>
 
-          <!-- Botón de Ir al Panel cuando SÍ está logueado -->
-          <RouterLink v-else to="/dashboard" class="btn-panel"> Ir al Panel </RouterLink>
+          <!-- Botón de perfil / logout cuando SÍ está logueado -->
+          <div v-else style="display:flex;gap:8px;align-items:center">
+            <RouterLink to="/perfil" class="btn-panel">Mi Perfil</RouterLink>
+            <RouterLink to="/dashboard" class="btn-panel">Panel</RouterLink>
+            <button class="btn-logout" @click="authStore.logout()">Cerrar sesión</button>
+          </div>
         </div>
       </div>
     </div>
@@ -124,6 +129,27 @@ const authStore = useAuthStore()
   display: flex;
   align-items: center;
   gap: 20px;
+}
+
+.btn-register {
+  background: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+  padding: 8px 20px;
+  text-decoration: none;
+}
+
+.btn-logout {
+  background: transparent;
+  color: #000000;
+  border: 1px solid transparent;
+  padding: 8px 18px;
+  cursor: pointer;
+}
+
+.btn-logout:hover {
+  color: #ffffff;
+  background: #000000;
 }
 
 .btn-login {
