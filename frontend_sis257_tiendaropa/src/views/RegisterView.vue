@@ -54,6 +54,7 @@
 import { reactive, ref } from 'vue'
 import { useAuthStore } from '@/stores'
 import { useRouter, RouterLink } from 'vue-router'
+import http from '@/plugins/axios'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -74,6 +75,22 @@ const submit = async () => {
   try {
     const ok = await authStore.register(form)
     if (ok) {
+      // try to create the Cliente profile for the just-created usuario
+      try {
+        const clientePayload = {
+          nombre: form.nombre ?? '',
+          apellido: form.apellido ?? undefined,
+          telefono: form.telefono ?? undefined,
+          direccion: form.direccion ?? undefined,
+        }
+        await http.post('clientes/me', clientePayload)
+      } catch (e) {
+        // non-blocking - log for debugging
+        ;(window.console as any).error('Crear cliente falló:', e)
+      }
+
+      // show success toast if available and navigate to profile
+      ;(window as any).__app_toasts?.push?.('Cuenta creada correctamente', 'success', 3500)
       router.push('/perfil')
     } else {
       error.value = 'No se pudo crear la cuenta.'

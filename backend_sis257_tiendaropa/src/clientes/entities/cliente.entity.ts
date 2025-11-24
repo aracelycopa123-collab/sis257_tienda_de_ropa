@@ -24,6 +24,15 @@ export class Cliente {
   apellido?: string;
 
   @Column({ type: 'varchar', length: 30, nullable: true })
+  cedula?: string;
+
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  genero?: string;
+
+  @Column({ type: 'date', name: 'fecha_nacimiento', nullable: true })
+  fechaNacimiento?: Date;
+
+  @Column({ type: 'varchar', length: 30, nullable: true })
   telefono?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })

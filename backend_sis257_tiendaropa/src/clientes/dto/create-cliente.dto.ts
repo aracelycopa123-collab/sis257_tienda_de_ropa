@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Matches, MaxLength, IsOptional, IsNumber } from 'class-validator';
+import { IsString, Matches, MaxLength, IsOptional, IsNumber, IsDateString } from 'class-validator';
 
 export class CreateClienteDto {
   @ApiProperty({
@@ -33,6 +33,34 @@ export class CreateClienteDto {
     message: 'El campo telefono tiene un formato inválido',
   })
   telefono?: string;
+
+  @ApiProperty({
+    example: '73684446',
+  })
+  @IsOptional()
+  @IsString({ message: 'El campo cedula debe ser de tipo cadena' })
+  @MaxLength(30, {
+    message: 'El campo cedula no debe ser mayor a 30 caracteres',
+  })
+  cedula?: string;
+
+  @ApiProperty({
+    example: 'femenino',
+  })
+  @IsOptional()
+  @IsString({ message: 'El campo genero debe ser de tipo cadena' })
+  @MaxLength(20, {
+    message: 'El campo genero no debe ser mayor a 20 caracteres',
+  })
+  genero?: string;
+
+  @ApiProperty({
+    example: '1990-08-22',
+    description: 'Fecha de nacimiento en formato ISO (YYYY-MM-DD)'
+  })
+  @IsOptional()
+  @IsDateString({}, { message: 'El campo fechaNacimiento debe ser una fecha válida' })
+  fechaNacimiento?: string;
 
   @ApiProperty({
     example: 'Av. Siempre Viva 123',

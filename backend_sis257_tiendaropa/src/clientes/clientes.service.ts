@@ -21,6 +21,9 @@ export class ClientesService {
     cliente.apellido = createClienteDto.apellido?.trim();
     cliente.telefono = createClienteDto.telefono?.trim();
     cliente.direccion = createClienteDto.direccion?.trim();
+    cliente.cedula = createClienteDto.cedula?.trim() || undefined;
+    cliente.genero = createClienteDto.genero?.trim() || undefined;
+    cliente.fechaNacimiento = createClienteDto.fechaNacimiento ? new Date(createClienteDto.fechaNacimiento) : undefined;
     if (createClienteDto.idUsuario) {
       cliente.idUsuario = createClienteDto.idUsuario;
     }
@@ -29,10 +32,13 @@ export class ClientesService {
 
   async createForUsuario(idUsuario: number, createClienteDto: CreateClienteDto): Promise<Cliente> {
     const cliente = new Cliente();
-    cliente.nombre = createClienteDto.nombre?.trim() || null;
-    cliente.apellido = createClienteDto.apellido?.trim() || null;
-    cliente.telefono = createClienteDto.telefono?.trim() || null;
-    cliente.direccion = createClienteDto.direccion?.trim() || null;
+    cliente.nombre = createClienteDto.nombre?.trim() || undefined;
+    cliente.apellido = createClienteDto.apellido?.trim() || undefined;
+    cliente.telefono = createClienteDto.telefono?.trim() || undefined;
+    cliente.direccion = createClienteDto.direccion?.trim() || undefined;
+    cliente.cedula = createClienteDto.cedula?.trim() || undefined;
+    cliente.genero = createClienteDto.genero?.trim() || undefined;
+    cliente.fechaNacimiento = createClienteDto.fechaNacimiento ? new Date(createClienteDto.fechaNacimiento) : undefined;
     cliente.idUsuario = idUsuario;
     return this.clientesRepository.save(cliente);
   }

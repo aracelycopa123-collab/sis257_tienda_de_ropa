@@ -42,6 +42,21 @@ const router = createRouter({
       component: () => import('../views/ProfileView.vue'),
     },
     {
+      path: '/direcciones',
+      name: 'direcciones',
+      component: () => import('../views/DireccionesView.vue'),
+    },
+    {
+      path: '/tarjetas',
+      name: 'tarjetas',
+      component: () => import('../views/TarjetasView.vue'),
+    },
+    {
+      path: '/auth',
+      name: 'auth',
+      component: () => import('../views/AutenticacionView.vue'),
+    },
+    {
       path: '/categorias',
       name: 'categorias',
       component: () => import('../views/CategoriasView.vue'),
@@ -81,13 +96,31 @@ router.beforeEach(async (to) => {
     '/perfil'
   ]
 
+  const adminOnly: string[] = ['/dashboard', '/categorias', '/productos', '/clientes', '/ventas']
+
   const authRequired = protectedPages.some(page => to.path.startsWith(page))
+  const adminRequired = adminOnly.some(page => to.path.startsWith(page))
   const authStore = useAuthStore()
 
+  // If route requires auth but no token -> redirect to login
   if (authRequired && !getTokenFromLocalStorage()) {
     if (authStore) authStore.logout()
     authStore.returnUrl = to.fullPath
     return '/login'
+  }
+
+  // If route is admin-only, ensure user's role is admin (accept common variants)
+  if (adminRequired) {
+    const roleCandidates = [authStore.role, localStorage.getItem('role')]
+    const u: any = authStore.user
+    if (u && typeof u === 'object') {
+      roleCandidates.push(u.rol || u.role || null)
+      if (u.usuario && typeof u.usuario === 'object') roleCandidates.push(u.usuario.rol || u.usuario.role || null)
+    }
+    const isAdmin = roleCandidates.some(r => !!r && /admin|administrador|super/i.test(String(r)))
+    if (!isAdmin) {
+      return '/'
+    }
   }
 })
 

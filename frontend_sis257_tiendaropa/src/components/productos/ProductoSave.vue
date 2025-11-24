@@ -24,6 +24,12 @@ const genero = ref('unisex')
 const imagenes = ref('')
 const idCategoria = ref<number | null>(null)
 
+// predefined size sets
+const clothingSizes = ['XS','S','M','L','XL','XXL']
+const shoeSizes = ['35','36','37','38','39','40','41','42','43','44','45']
+const otherSizes = ['Única']
+const useCustomTalla = ref(false)
+
 const categorias = ref<Categoria[]>([])
 const isEdit = ref(false)
 
@@ -51,6 +57,11 @@ watch(
         genero.value = props.producto.genero || 'unisex'
         imagenes.value = props.producto.imagenes
         idCategoria.value = props.producto.idCategoria
+        // if existing product talla doesn't exist in current sizes list, switch to custom input
+        const currentSizes = sizesList()
+        if (talla.value && !currentSizes.includes(talla.value)) {
+          useCustomTalla.value = true
+        }
       } else {
         isEdit.value = false
         resetForm()
@@ -59,6 +70,16 @@ watch(
     }
   }
 )
+
+// when category changes, reset custom talla flag and clear talla if necessary
+watch(idCategoria, (newVal) => {
+  useCustomTalla.value = false
+  // if current talla is not in the new list, clear it
+  const list = sizesList()
+  if (talla.value && !list.includes(talla.value)) {
+    talla.value = ''
+  }
+})
 
 const resetForm = () => {
   nombre.value = ''
@@ -70,6 +91,21 @@ const resetForm = () => {
   genero.value = 'unisex'
   imagenes.value = ''
   idCategoria.value = null
+  useCustomTalla.value = false
+}
+
+// computed list of sizes depending on selected category name
+function sizesList() {
+  try {
+    const cat = categorias.value.find((c) => c.id === idCategoria.value)
+    const name = (cat?.nombre || '').toLowerCase()
+    if (name.includes('zapato') || name.includes('calzado') || name.includes('shoe')) return shoeSizes
+    if (name.includes('accesorio') || name.includes('joya')) return otherSizes
+    // default clothing sizes
+    return clothingSizes
+  } catch (e) {
+    return clothingSizes
+  }
 }
 
 const guardarProducto = async () => {
@@ -112,6 +148,14 @@ const cerrarModal = () => {
 
 onMounted(() => {
   cargarCategorias()
+})
+
+// if user selects 'Otro...' in select, switch to custom input
+watch(talla, (val) => {
+  if (val === '__other__') {
+    useCustomTalla.value = true
+    talla.value = ''
+  }
 })
 </script>
 
@@ -198,14 +242,17 @@ onMounted(() => {
 
               <div class="form-group">
                 <label for="talla" class="form-label">Talla *</label>
-                <input
-                  v-model="talla"
-                  type="text"
-                  class="form-input"
-                  id="talla"
-                  placeholder="S, M, L, XL..."
-                  required
-                />
+                <div v-if="!useCustomTalla">
+                  <select v-model="talla" class="form-input form-select" id="talla" required>
+                    <option value="" disabled>Selecciona una talla</option>
+                    <option v-for="s in sizesList()" :key="s" :value="s">{{ s }}</option>
+                    <option value="__other__">Otro...</option>
+                  </select>
+                </div>
+                <div v-else>
+                  <input v-model="talla" type="text" class="form-input" id="talla" placeholder="Ej: 35, 36 o S, M..." required />
+                  <div style="margin-top:6px"><a href="#" @click.prevent="useCustomTalla=false">Usar lista de tallas</a></div>
+                </div>
               </div>
 
               <div class="form-group">

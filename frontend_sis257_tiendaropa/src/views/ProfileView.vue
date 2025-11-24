@@ -2,7 +2,7 @@
   <div class="profile-page">
     <div class="container">
       <div class="page-header-row">
-        <h2 class="page-title">Mi perfil</h2>
+        <h2 class="page-title">MI CUENTA</h2>
       </div>
 
       <!-- Confirm dialog (used instead of native confirm) -->
@@ -24,48 +24,57 @@
 
       <div v-else>
         <div :class="['profile-layout', { 'with-orders': showOrders }]">
+          <aside class="side-nav">
+            <div class="nav-top">
+              <div class="avatar large">{{ initials }}</div>
+              <div class="greeting">Hola!</div>
+            </div>
+            <nav class="nav-list">
+              <RouterLink v-if="isAdmin" to="/dashboard" class="nav-item">Panel administrador</RouterLink>
+              <RouterLink to="/perfil" class="nav-item" active-class="active">Perfil</RouterLink>
+              <RouterLink to="/direcciones" class="nav-item">Direcciones</RouterLink>
+              <button class="nav-item btn-link" @click="openModal('orders')">Pedidos</button>
+              <RouterLink to="/tarjetas" class="nav-item">Tarjetas de crédito</RouterLink>
+              <RouterLink to="/auth" class="nav-item">Autenticación</RouterLink>
+              <button class="nav-item logout" @click="authStore.logout()">Salir</button>
+            </nav>
+          </aside>
+
           <section class="profile-card card">
-            <div class="profile-top">
-              <div class="avatar">{{ initials }}</div>
-              <div class="meta">
-                <h3>{{ profile?.nombre || profile?.usuario?.nombreUsuario || 'Usuario' }}</h3>
-                <div class="muted">{{ profile?.usuario?.email || '' }}</div>
+            <div class="profile-header">
+              <h3 class="section-title">PERFIL</h3>
+            </div>
+
+            <div v-if="!profile" class="no-profile card">
+              <p>No tienes un perfil aún.</p>
+              <div style="margin-top:12px">
+                <button class="btn btn-primary" @click="createProfile">Crear mi perfil</button>
               </div>
-              <div class="actions">
-                <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end">
-                  <button class="btn control-box" @click="openModal('orders')">Mis pedidos</button>
-                  <button class="btn control-box btn-primary" @click="openModal('edit')">Editar perfil</button>
+            </div>
+
+            <div v-else class="profile-body">
+              <div class="info-grid">
+                <div class="field-block"><label>NOMBRE</label><div class="value">{{ profile.nombre || '—' }}</div></div>
+                <div class="field-block"><label>APELLIDO</label><div class="value">{{ profile.apellido || '—' }}</div></div>
+
+                <div class="field-block"><label>CORREO ELECTRÓNICO</label><div class="value muted">{{ profile.usuario?.email || '—' }}</div></div>
+                <div class="field-block"><label></label><div></div></div>
+
+                <div class="field-block"><label>CÉDULA</label><div class="value">{{ profile.cedula || '—' }}</div></div>
+                <div class="field-block"><label>GÉNERO</label><div class="value">{{ profile.genero || '—' }}</div></div>
+
+                <div class="field-block"><label>FECHA DE NACIMIENTO</label><div class="value">{{ profile?.fechaNacimiento ? formatDate(profile?.fechaNacimiento) : '—' }}</div></div>
+                <div class="field-block"><label>TELÉFONO</label><div class="value">{{ profile.telefono || '—' }}</div></div>
+              </div>
+
+              <div class="card-actions">
+                <div style="margin-left:auto">
+                  <button class="btn btn-dark" @click="openModal('edit')">EDITAR</button>
                 </div>
               </div>
             </div>
-
-            <div class="profile-content">
-              <div class="info">
-                <div class="info-row"><label>Nombre</label><div>{{ profile?.nombre || '—' }}</div></div>
-                <div class="info-row"><label>Apellido</label><div>{{ profile?.apellido || '—' }}</div></div>
-                <div class="info-row"><label>Teléfono</label><div>{{ profile?.telefono || '—' }}</div></div>
-              </div>
-
-              <div v-if="editMode" class="edit">
-                <form class="edit-form" @submit.prevent="save">
-                  <div class="field"><label>Nombre</label><input v-model="form.nombre" /></div>
-                  <div class="field"><label>Apellido</label><input v-model="form.apellido" /></div>
-                  <div class="form-actions"><button class="btn btn-primary" type="submit">Guardar</button> <button type="button" class="btn btn-ghost" @click="cancelEdit">Cancelar</button></div>
-                </form>
-                <div v-if="saveMessage" class="save-message">{{ saveMessage }}</div>
-              </div>
-            </div>
           </section>
 
-          <!-- (mobile drawer/backdrop removed - using side modal instead) -->
-
-          <!-- Center column: orders area on desktop. On mobile it becomes a drawer. -->
-          <!-- Center column: reserved for content. Orders and edit now open in side modal -->
-          <section class="center-area">
-            <div class="muted">Presiona "Mis pedidos" o "Editar perfil" para abrir la ventana lateral.</div>
-          </section>
-
-          <!-- Right column removed: actions now live in the profile card -->
         </div>
 
         <!-- Side modal + backdrop (shows orders or edit form) -->
@@ -94,11 +103,23 @@
             </div>
           </div>
 
-          <div v-else class="modal-body">
+            <div v-else class="modal-body">
             <form class="edit-form" @submit.prevent="saveInModal">
               <div class="field"><label>Nombre</label><input v-model="form.nombre" /></div>
               <div class="field"><label>Apellido</label><input v-model="form.apellido" /></div>
+              <div class="field"><label>Correo electrónico</label><input v-model="form.email" placeholder="correo@ejemplo.com" /></div>
               <div class="field"><label>Teléfono</label><input v-model="form.telefono" /></div>
+              <div class="field"><label>Dirección</label><input v-model="form.direccion" /></div>
+              <div class="field"><label>Cédula</label><input v-model="form.cedula" /></div>
+              <div class="field"><label>Género</label>
+                <select v-model="form.genero">
+                  <option value="">--</option>
+                  <option value="femenino">Femenino</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+              <div class="field"><label>Fecha de nacimiento</label><input type="date" v-model="form.fechaNacimiento" /></div>
               <div class="form-actions"><button class="btn btn-primary" type="submit">Guardar</button> <button type="button" class="btn btn-ghost" @click="closeModal">Cancelar</button></div>
             </form>
           </div>
@@ -120,7 +141,17 @@
                 const error = ref<string | null>(null)
                 const editMode = ref<boolean>(false)
                 const saveMessage = ref<string>('')
-                const form = reactive({ nombre: '', apellido: '', telefono: '', direccion: '' })
+                type ProfileForm = {
+                  nombre: string
+                  apellido: string
+                  telefono: string
+                  direccion: string
+                  cedula: string
+                  genero: string
+                  fechaNacimiento?: string
+                  email: string
+                }
+                const form = reactive<ProfileForm>({ nombre: '', apellido: '', telefono: '', direccion: '', cedula: '', genero: '', fechaNacimiento: undefined, email: '' })
 
                 const selectedOrder = ref<any>(null)
                 const orderLoading = ref<boolean>(false)
@@ -147,6 +178,27 @@
                 const initials = computed(() => {
                   const name = profile.value?.usuario?.nombreUsuario || profile.value?.nombre || ''
                   return (name.charAt(0) || 'U').toUpperCase()
+                })
+
+                const isAdmin = computed(() => {
+                  const regex = /admin|administrador|super/i
+                  const candidates: Array<string | null | undefined> = [
+                    authStore.role,
+                    localStorage.getItem('role'),
+                  ]
+                  // also inspect user object if available
+                  const u: any = authStore.user
+                  if (u && typeof u === 'object') {
+                    candidates.push(u.rol || u.role || null)
+                    if (u.usuario && typeof u.usuario === 'object') candidates.push(u.usuario.rol || u.usuario.role || null)
+                  }
+                  for (const c of candidates) {
+                    if (!c) continue
+                    try {
+                      if (regex.test(String(c))) return true
+                    } catch {}
+                  }
+                  return false
                 })
 
                 function formatDate(value: string | Date | undefined) {
@@ -221,6 +273,10 @@
                     form.apellido = profile.value.apellido || ''
                     form.telefono = profile.value.telefono || ''
                     form.direccion = profile.value.direccion || ''
+                    form.cedula = profile.value.cedula || ''
+                    form.genero = profile.value.genero || ''
+                    form.fechaNacimiento = profile.value.fechaNacimiento ? String(profile.value.fechaNacimiento).split('T')[0] : undefined
+                    form.email = profile.value.usuario?.nombreUsuario || profile.value.usuario?.email || ''
                     saveMessage.value = ''
                   } catch (err: any) {
                     profile.value = null
@@ -234,7 +290,25 @@
                 async function save() {
                   if (!profile.value) return
                   try {
-                    await http.patch(`clientes/${profile.value.id}`, { ...form });
+                    // if usuario exists and email changed, update usuario.nombreUsuario
+                    if (profile.value.usuario?.id && form.email && form.email !== (profile.value.usuario.nombreUsuario || profile.value.usuario.email || '')) {
+                      try {
+                        await http.patch(`usuarios/${profile.value.usuario.id}`, { nombreUsuario: form.email })
+                      } catch (uErr: any) {
+                        (window as any).__app_toasts?.push?.(uErr?.response?.data?.message || 'Error actualizando usuario', 'error')
+                        (window.console as any).error('Error actualizando usuario', uErr)
+                      }
+                    }
+                    const payload = {
+                      nombre: form.nombre ?? undefined,
+                      apellido: form.apellido ?? undefined,
+                      telefono: form.telefono ?? undefined,
+                      direccion: form.direccion ?? undefined,
+                      cedula: form.cedula ?? undefined,
+                      genero: form.genero ?? undefined,
+                      fechaNacimiento: form.fechaNacimiento ?? undefined,
+                    }
+                    await http.patch(`clientes/${profile.value.id}`, payload);
                     editMode.value = false
                     saveMessage.value = 'Perfil actualizado correctamente.'
                     await load();
@@ -258,6 +332,10 @@
                     form.apellido = profile.value.apellido || ''
                     form.telefono = profile.value.telefono || ''
                     form.direccion = profile.value.direccion || ''
+                    form.cedula = profile.value.cedula || ''
+                    form.genero = profile.value.genero || ''
+                    form.fechaNacimiento = profile.value.fechaNacimiento ? String(profile.value.fechaNacimiento).split('T')[0] : undefined
+                    form.email = profile.value.usuario?.nombreUsuario || profile.value.usuario?.email || ''
                   }
                 }
 
@@ -271,7 +349,25 @@
                 async function saveInModal() {
                   if (!profile.value) return
                   try {
-                    await http.patch(`clientes/${profile.value.id}`, { ...form });
+                    // update usuario if email changed
+                    if (profile.value.usuario?.id && form.email && form.email !== (profile.value.usuario.nombreUsuario || profile.value.usuario.email || '')) {
+                      try {
+                        await http.patch(`usuarios/${profile.value.usuario.id}`, { nombreUsuario: form.email })
+                      } catch (uErr: any) {
+                        (window as any).__app_toasts?.push?.(uErr?.response?.data?.message || 'Error actualizando usuario', 'error')
+                        (window.console as any).error('Error actualizando usuario', uErr)
+                      }
+                    }
+                    const payload = {
+                      nombre: form.nombre ?? undefined,
+                      apellido: form.apellido ?? undefined,
+                      telefono: form.telefono ?? undefined,
+                      direccion: form.direccion ?? undefined,
+                      cedula: form.cedula ?? undefined,
+                      genero: form.genero ?? undefined,
+                      fechaNacimiento: form.fechaNacimiento ?? undefined,
+                    }
+                    await http.patch(`clientes/${profile.value.id}`, payload);
                     (window as any).__app_toasts.push('Perfil actualizado correctamente.', 'success')
                     await load();
                     closeModal()
@@ -287,6 +383,9 @@
                     form.apellido = profile.value.apellido || ''
                     form.telefono = profile.value.telefono || ''
                     form.direccion = profile.value.direccion || ''
+                    form.cedula = profile.value.cedula || ''
+                    form.genero = profile.value.genero || ''
+                    form.fechaNacimiento = profile.value.fechaNacimiento ? String(profile.value.fechaNacimiento).split('T')[0] : undefined
                   }
                   editMode.value = false
                   saveMessage.value = ''
@@ -530,5 +629,32 @@
 @media (max-width: 900px) {
   .profile-layout { grid-template-columns: 1fr; }
   .edit { width:100% }
+}
+/* Sidebar and profile card layout to match reference */
+.side-nav { padding: 18px 12px; display:flex; flex-direction:column; gap:18px }
+.side-nav .nav-top { display:flex; align-items:center; gap:12px }
+.avatar.large { width:84px; height:84px; font-size:28px }
+.greeting { font-weight:700 }
+.nav-list { display:flex; flex-direction:column; gap:12px; margin-top:18px }
+.nav-item { background: transparent; border: none; text-align: left; padding: 8px 12px; color:#666; font-weight:700; text-decoration:none; cursor:pointer }
+.nav-item.active, .nav-item:hover { color:#111; border-left:4px solid #111; padding-left:8px; background:transparent }
+.nav-item.logout { color:#e53935; font-weight:700 }
+
+.profile-card { display:flex; flex-direction:column; min-height: 420px }
+.profile-header { padding-bottom:12px }
+.section-title { font-size:0.95rem; font-weight:800; letter-spacing:0.6px }
+.info-grid { display:grid; grid-template-columns: 1fr 1fr; gap:18px; margin-top:12px }
+.field-block label { font-weight:800; font-size:0.85rem; color:#111; margin-bottom:8px }
+.field-block .value { font-weight:700; color:#222 }
+.field-block .value.muted { color:#777; font-weight:600 }
+
+.card-actions { margin-top:auto; display:flex; align-items:center; padding-top:16px }
+.btn-dark { background:#000; color:#fff; padding:12px 18px; border-radius:6px; border: none; font-weight:800 }
+
+@media (max-width: 900px) {
+  .profile-layout { grid-template-columns: 1fr }
+  .side-nav { order: -1; display:flex; flex-direction:row; gap:12px; padding:12px }
+  .nav-list { flex-direction:row; gap:8px; overflow:auto }
+  .info-grid { grid-template-columns: 1fr }
 }
 </style>
