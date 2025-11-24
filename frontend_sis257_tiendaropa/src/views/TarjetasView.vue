@@ -13,6 +13,7 @@
           </div>
           <nav class="nav-list">
             <RouterLink v-if="isAdmin" to="/dashboard" class="nav-item">Panel administrador</RouterLink>
+
             <RouterLink to="/perfil" class="nav-item">Perfil</RouterLink>
             <RouterLink to="/direcciones" class="nav-item">Direcciones</RouterLink>
             <RouterLink to="/ventas" class="nav-item">Pedidos</RouterLink>
@@ -139,6 +140,8 @@ function submitCard() {
   showAdd.value = false
   card.value = { number: '', name: '', expiry: '', cvc: '', pais: 'Bolivia', departamento: '', provincia: '', ciudad: '' }
 }
+
+
 </script>
 
 <style scoped>

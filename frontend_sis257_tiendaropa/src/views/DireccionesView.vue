@@ -124,6 +124,8 @@ function submitAddress() {
   showAdd.value = false
   address.value = { pais: 'Bolivia', departamento: '', provincia: '', ciudad: '', direccion: '' }
 }
+
+
 </script>
 
 <style scoped>

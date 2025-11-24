@@ -1,10 +1,32 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores'
 import CarritoWidget from './CarritoWidget.vue'
 import CarritoFlotante from './CarritoFlotante.vue'
 
 const authStore = useAuthStore()
+
+const isAdmin = computed(() => {
+  const regex = /admin|administrador|super/i
+  const candidates: Array<string | null | undefined> = [
+    authStore.role,
+    localStorage.getItem('role'),
+  ]
+  // also inspect user object if available
+  const u: any = authStore.user
+  if (u && typeof u === 'object') {
+    candidates.push(u.rol || u.role || null)
+    if (u.usuario && typeof u.usuario === 'object') candidates.push(u.usuario.rol || u.usuario.role || null)
+  }
+  for (const c of candidates) {
+    if (!c) continue
+    try {
+      if (regex.test(String(c))) return true
+    } catch {}
+  }
+  return false
+})
 </script>
 
 <template>
@@ -43,6 +65,9 @@ const authStore = useAuthStore()
           <!-- Carrito Widget -->
           <CarritoWidget />
 
+          <!-- Botón ADM de acceso rápido (siempre visible) -->
+          <RouterLink to="/dashboard" class="btn-adm">ADM</RouterLink>
+
           <!-- Botón de Login cuando NO está logueado -->
           <div v-if="!authStore.token" style="display:flex;gap:8px;align-items:center">
             <RouterLink to="/login" class="btn-login">Iniciar Sesión</RouterLink>
@@ -52,7 +77,7 @@ const authStore = useAuthStore()
           <!-- Botón de perfil / logout cuando SÍ está logueado -->
           <div v-else style="display:flex;gap:8px;align-items:center">
             <RouterLink to="/perfil" class="btn-panel">Mi Perfil</RouterLink>
-            <RouterLink v-if="authStore.role === 'admin'" to="/dashboard" class="btn-panel">Panel</RouterLink>
+            <RouterLink v-if="isAdmin" to="/dashboard" class="btn-panel">Panel</RouterLink>
             <button class="btn-logout" @click="authStore.logout()">Cerrar sesión</button>
           </div>
         </div>
@@ -129,6 +154,26 @@ const authStore = useAuthStore()
   display: flex;
   align-items: center;
   gap: 20px;
+}
+
+.btn-adm {
+  background: #ff6b35;
+  color: #ffffff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.btn-adm:hover {
+  background: #ff5722;
+  color: #ffffff;
 }
 
 .btn-register {

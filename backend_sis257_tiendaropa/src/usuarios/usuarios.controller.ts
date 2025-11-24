@@ -39,4 +39,9 @@ export class UsuariosController {
   remove(@Param('id') id: string) {
     return this.usuariosService.remove(+id);
   }
+
+  @Post('seed/promote-admin')
+  promoteAdmin() {
+    return this.usuariosService.promoteAdminUser();
+  }
 }

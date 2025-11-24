@@ -85,4 +85,23 @@ export class UsuariosService {
     usuarioOk.clave = '';
     return usuarioOk;
   }
+
+  async promoteAdminUser(): Promise<{ message: string }> {
+    // Busca el usuario 'admin' y lo promociona a rol 'admin' si no lo está
+    const adminUser = await this.usuariosRepository.findOneBy({
+      nombreUsuario: 'admin',
+    });
+
+    if (!adminUser) {
+      return { message: '⚠ Usuario admin no encontrado' };
+    }
+
+    if (adminUser.rol === 'admin') {
+      return { message: '✓ Usuario admin ya tiene rol admin' };
+    }
+
+    adminUser.rol = 'admin';
+    await this.usuariosRepository.save(adminUser);
+    return { message: '✓ Usuario admin promocionado a rol admin' };
+  }
 }
