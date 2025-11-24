@@ -87,7 +87,7 @@ se describen las entidades iniciales del sistema y los campos que podrían forma
 - tipo (stock_bajo, venta, ajuste, compra)
 - id_usuario
 - visto (sí/no)
-- fecha
+  
 
 
 
