@@ -1,7 +1,5 @@
 # sis257_tienda_de_ropa
-
 ## Descripción inicial del negocio
-
 La **Tienda de Ropa “ROMA”** es un negocio dedicado a la venta de prendas de vestir para hombres, mujeres, niños realiza ventas online.  
 El objetivo del sistema es automatizar la gestión de productos, controlar el inventario y facilitar el proceso de compra para los clientes.  
 
