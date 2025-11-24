@@ -58,9 +58,11 @@ export class AuthService {
 
       usuario.clave = '';
       return { usuario, cliente, access_token };
-    } catch (err) {
+    } catch (err: any) {
       if (err instanceof ConflictException) throw err;
-      throw new InternalServerErrorException('Error al crear cuenta');
+      console.error('Error en AuthService.register:', err);
+      // Re-throw with the inner message to surface DB/validation issues to the client for debugging
+      throw new InternalServerErrorException(err?.message || 'Error al crear cuenta');
     }
   }
 

@@ -30,7 +30,7 @@ export class Venta {
   @Column({
     type: 'varchar',
     length: 20,
-    default: 'realizada',
+    default: 'pendiente',
     comment: 'Estado de la venta: realizada o anulada',
   })
   estado: string;

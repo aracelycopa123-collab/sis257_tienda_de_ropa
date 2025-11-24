@@ -40,8 +40,16 @@ import ProductGallery from '@/components/ProductGallery.vue'
       </div>
     </section>
 
-    <!-- Exclusive Collection Section -->
-    <section>
+
+
+    <!-- Featured Products Section -->
+    <FeaturedProducts />
+
+    <!-- Product Gallery Section -->
+    <ProductGallery />
+
+    <!-- Exclusive Collection Section (moved below the product gallery) -->
+    <section class="exclusive-collection-section">
       <div class="container">
         <div class="row h-100 g-0">
           <div class="col-md-6">
@@ -92,13 +100,6 @@ import ProductGallery from '@/components/ProductGallery.vue'
         </div>
       </div>
     </section>
-
-
-    <!-- Featured Products Section -->
-    <FeaturedProducts />
-
-    <!-- Product Gallery Section -->
-    <ProductGallery />
   </div>
 </template>
 

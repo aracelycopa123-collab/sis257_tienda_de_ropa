@@ -27,6 +27,16 @@ export class ClientesService {
     return this.clientesRepository.save(cliente);
   }
 
+  async createForUsuario(idUsuario: number, createClienteDto: CreateClienteDto): Promise<Cliente> {
+    const cliente = new Cliente();
+    cliente.nombre = createClienteDto.nombre?.trim() || null;
+    cliente.apellido = createClienteDto.apellido?.trim() || null;
+    cliente.telefono = createClienteDto.telefono?.trim() || null;
+    cliente.direccion = createClienteDto.direccion?.trim() || null;
+    cliente.idUsuario = idUsuario;
+    return this.clientesRepository.save(cliente);
+  }
+
   async findAll() {
     return this.clientesRepository.find();
   }
@@ -36,6 +46,8 @@ export class ClientesService {
       .createQueryBuilder('cliente')
       .leftJoinAndSelect('cliente.usuario', 'usuario')
       .leftJoinAndSelect('cliente.ventas', 'ventas')
+      .leftJoinAndSelect('ventas.ventadetalles', 'ventadetalles')
+      .leftJoinAndSelect('ventadetalles.producto', 'producto')
       .where('cliente.id_usuario = :idUsuario', { idUsuario })
       .orderBy('ventas.fecha_creacion', 'DESC')
       .getOne();
@@ -48,6 +60,8 @@ export class ClientesService {
       .createQueryBuilder('cliente')
       .leftJoinAndSelect('cliente.usuario', 'usuario')
       .leftJoinAndSelect('cliente.ventas', 'ventas')
+      .leftJoinAndSelect('ventas.ventadetalles', 'ventadetalles')
+      .leftJoinAndSelect('ventadetalles.producto', 'producto')
       .where('cliente.id = :id', { id })
       .orderBy('ventas.fecha_creacion', 'DESC')
       .getOne();

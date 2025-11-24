@@ -40,6 +40,15 @@ export class ClientesController {
     return this.clientesService.findByUsuario(usuario.id);
   }
 
+  @Post('me')
+  @UseGuards(AuthGuard('jwt'))
+  createForMe(@Req() req: any, @Body() createClienteDto: CreateClienteDto) {
+    const usuario = req.user;
+    // ensure idUsuario is set to the authenticated user
+    const dto = { ...createClienteDto, idUsuario: usuario.id } as CreateClienteDto;
+    return this.clientesService.createForUsuario(usuario.id, dto);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.clientesService.findOne(+id);

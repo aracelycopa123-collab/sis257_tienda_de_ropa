@@ -5,7 +5,7 @@ export class AuthRegisterDto {
   @ApiProperty({ example: 'usuario123', description: 'Nombre de usuario' })
   @IsNotEmpty({ message: 'El campo usuario es obligatorio' })
   @IsString({ message: 'El campo usuario debe ser de tipo cadena' })
-  @MaxLength(15, { message: 'El campo usuario no debe ser mayor a 15 caracteres' })
+  @MaxLength(50, { message: 'El campo usuario no debe ser mayor a 50 caracteres' })
   nombreUsuario: string;
 
   @ApiProperty({ example: 'miPassword123', description: 'Clave del usuario' })

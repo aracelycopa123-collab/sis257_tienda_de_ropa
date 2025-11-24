@@ -97,7 +97,7 @@ export class VentasService {
       const nuevaVenta = this.ventaRepository.create({
         metodoPago: createVentaDto.metodoPago || 'efectivo',
         totalVenta: 0,
-        estado: 'realizada',
+        estado: 'pendiente',
         montoPagado: null, // Puede ser null
         cambio: null, // Puede ser null
       });
