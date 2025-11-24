@@ -1,8 +1,10 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 import { UsuariosService } from 'src/usuarios/usuarios.service';
 import { ClientesService } from 'src/clientes/clientes.service';
+import { DataSource } from 'typeorm';
+import { Cliente } from 'src/clientes/entities/cliente.entity';
 import { AuthLoginDto } from './dto/auth-login.dto';
 import { AuthRegisterDto } from './dto/auth-register.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
@@ -13,6 +15,7 @@ export class AuthService {
     private usuarioService: UsuariosService,
     private jwtService: JwtService,
     private clientesService: ClientesService,
+    private dataSource: DataSource,
   ) {}
   async login(authLoginDto: AuthLoginDto): Promise<any> {
     const { nombreUsuario, clave } = authLoginDto;
@@ -28,33 +31,37 @@ export class AuthService {
     const { nombreUsuario, clave, nombre, apellido, telefono, direccion } =
       authRegisterDto;
 
-    // create usuario with provided password
-    let usuario: Usuario;
+    // Use a transaction so we don't leave an orphan Usuario if Cliente creation fails
     try {
-      usuario = await this.usuarioService.createWithPassword(nombreUsuario, clave);
+      const result = await this.dataSource.transaction(async (manager) => {
+        const usuarioRepo = manager.getRepository(Usuario);
+        const clienteRepo = manager.getRepository(Cliente);
+
+        const existe = await usuarioRepo.findOneBy({ nombreUsuario: nombreUsuario.trim() });
+        if (existe) {
+          throw new ConflictException('El usuario ya existe');
+        }
+
+        const nuevoUsuario = usuarioRepo.create({ nombreUsuario: nombreUsuario.trim(), clave: clave ?? (process.env.DEFAULT_PASSWORD ?? '') });
+        const usuarioGuardado = await usuarioRepo.save(nuevoUsuario);
+
+        const cliente = clienteRepo.create({ nombre: nombre?.trim(), apellido: apellido?.trim(), telefono: telefono?.trim(), direccion: direccion?.trim(), idUsuario: usuarioGuardado.id });
+        const clienteGuardado = await clienteRepo.save(cliente);
+
+        return { usuario: usuarioGuardado, cliente: clienteGuardado };
+      });
+
+      const usuario = result.usuario as Usuario;
+      const cliente = result.cliente;
+      const payload = { sub: usuario.id };
+      const access_token = this.getAccessToken(payload);
+
+      usuario.clave = '';
+      return { usuario, cliente, access_token };
     } catch (err) {
-      // bubble up conflict exception if user exists
-      throw err;
+      if (err instanceof ConflictException) throw err;
+      throw new InternalServerErrorException('Error al crear cuenta');
     }
-
-    // create cliente linked to usuario
-    const clienteDto: any = {
-      nombre,
-      apellido,
-      telefono,
-      direccion,
-      idUsuario: usuario.id,
-    };
-
-    const cliente = await this.clientesService.create(clienteDto);
-
-    const payload = { sub: usuario.id };
-    const access_token = this.getAccessToken(payload);
-
-    // hide password
-    usuario.clave = '';
-
-    return { usuario, cliente, access_token };
   }
 
   getAccessToken(payload: any) {

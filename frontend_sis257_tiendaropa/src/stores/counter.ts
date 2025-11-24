@@ -7,6 +7,7 @@ const useAuthStore = defineStore('auth', {
   state: () => ({
     user: localStorage.getItem('user') || '',
     token: getTokenFromLocalStorage(),
+    role: localStorage.getItem('role') || null,
     returnUrl: '',
   }),
   getters: {},
@@ -20,6 +21,8 @@ const useAuthStore = defineStore('auth', {
         }
         this.user = response.data.nombreUsuario
         localStorage.setItem('user', this.user)
+        this.role = response.data.rol || null
+        if (this.role) localStorage.setItem('role', this.role)
         return true
       } catch (error) {
         console.error(error)
@@ -34,6 +37,8 @@ const useAuthStore = defineStore('auth', {
         if (this.token) localStorage.setItem('token', this.token)
         this.user = response.data.usuario?.nombreUsuario || ''
         if (this.user) localStorage.setItem('user', this.user)
+        this.role = response.data.usuario?.rol || null
+        if (this.role) localStorage.setItem('role', this.role)
         return true
       } catch (error) {
         console.error(error)

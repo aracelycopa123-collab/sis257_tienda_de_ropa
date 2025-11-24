@@ -112,6 +112,20 @@ const cerrarDetalle = () => {
   ventaSeleccionada.value = null
 }
 
+const cambiarEstado = async (venta: Venta, nuevoEstado: string) => {
+  try {
+    const confirmMsg = `¿Confirmas cambiar el estado de la venta #${venta.id} a "${nuevoEstado}"?`;
+    if (!confirm(confirmMsg)) return;
+    await http.patch(`ventas/${venta.id}`, { estado: nuevoEstado })
+    // recargar lista
+    await cargarVentas()
+    alert('Estado actualizado correctamente')
+  } catch (err) {
+    console.error('Error actualizando estado:', err)
+    alert('Error al actualizar el estado. Revisa la consola del servidor.')
+  }
+}
+
 onMounted(() => cargarVentas())
 </script>
 
@@ -159,7 +173,8 @@ onMounted(() => cargarVentas())
             <td class="price">{{ Number(venta.totalVenta).toFixed(2) }} Bs</td>
             <td class="items-cell">{{ venta.ventadetalles?.length || 0 }} items</td>
             <td class="actions-cell">
-              <button @click="abrirDetalle(venta)" class="btn-detail" title="Ver detalle">
+              <div style="display:flex;gap:8px;align-items:center;justify-content:center">
+                <button @click="abrirDetalle(venta)" class="btn-detail" title="Ver detalle">
                 <svg
                   width="16"
                   height="16"
@@ -173,6 +188,14 @@ onMounted(() => cargarVentas())
                 </svg>
                 Ver Detalle
               </button>
+                <!-- Status actions -->
+                <div class="status-actions">
+                  <button v-if="venta.estado !== 'pendiente'" @click.prevent="cambiarEstado(venta, 'pendiente')" class="btn-small">Pendiente</button>
+                  <button v-if="venta.estado !== 'enviado'" @click.prevent="cambiarEstado(venta, 'enviado')" class="btn-small">Enviado</button>
+                  <button v-if="venta.estado !== 'realizada'" @click.prevent="cambiarEstado(venta, 'realizada')" class="btn-small">Confirmar</button>
+                  <button v-if="venta.estado !== 'anulada'" @click.prevent="cambiarEstado(venta, 'anulada')" class="btn-small danger">Anular</button>
+                </div>
+              </div>
             </td>
           </tr>
           <tr v-if="ventas.length === 0">
@@ -360,6 +383,11 @@ onMounted(() => cargarVentas())
   font-weight: 500;
   font-size: 0.9375rem;
 }
+
+.status-actions { display:flex; gap:6px }
+.btn-small { padding:6px 8px; font-size:0.72rem; border-radius:6px; border:1px solid #e5e5e5; background:transparent; cursor:pointer }
+.btn-small:hover { background:#f5f5f5 }
+.btn-small.danger { color:#c62828; border-color:#fbe9e9 }
 
 /* Badge */
 .badge {

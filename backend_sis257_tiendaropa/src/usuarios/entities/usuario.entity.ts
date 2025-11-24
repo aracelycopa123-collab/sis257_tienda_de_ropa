@@ -23,6 +23,9 @@ export class Usuario {
   @Column('varchar', { length: 5000, nullable: true })
   clave: string;
 
+  @Column('varchar', { length: 20, nullable: false, default: 'cliente' })
+  rol: string;
+
   @CreateDateColumn({ name: 'fecha_creacion' })
   fechaCreacion: Date;
 

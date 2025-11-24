@@ -73,7 +73,7 @@ export class UsuariosService {
   async validate(nombreUsuario: string, clave: string): Promise<Usuario> {
     const usuarioOk = await this.usuariosRepository.findOne({
       where: { nombreUsuario },
-      select: ['id', 'nombreUsuario', 'clave'],
+      select: ['id', 'nombreUsuario', 'clave', 'rol'],
     });
 
     if (!usuarioOk) throw new NotFoundException('Usuario inexistente');

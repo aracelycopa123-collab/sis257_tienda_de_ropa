@@ -52,7 +52,7 @@ const authStore = useAuthStore()
           <!-- Botón de perfil / logout cuando SÍ está logueado -->
           <div v-else style="display:flex;gap:8px;align-items:center">
             <RouterLink to="/perfil" class="btn-panel">Mi Perfil</RouterLink>
-            <RouterLink to="/dashboard" class="btn-panel">Panel</RouterLink>
+            <RouterLink v-if="authStore.role === 'admin'" to="/dashboard" class="btn-panel">Panel</RouterLink>
             <button class="btn-logout" @click="authStore.logout()">Cerrar sesión</button>
           </div>
         </div>
