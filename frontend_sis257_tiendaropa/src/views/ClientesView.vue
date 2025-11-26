@@ -2,6 +2,8 @@
 import ClienteList from '@/components/clientes/ClienteList.vue'
 import DashboardHeader from '@/components/DashboardHeader.vue'
 </script>
+// actualización 
+
 
 <template>
   <div class="view-wrapper">
