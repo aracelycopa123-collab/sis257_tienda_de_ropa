@@ -27,20 +27,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
-              <button class="carousel-control-prev" type="button" data-bs-target="#carouselBestDeals" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carouselBestDeals" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Siguiente</span>
-              </button>
-            </div>
           </div>
-        </div>
-        <div class="col-12 d-flex justify-content-center mt-5">
-          <a class="btn btn-lg btn-dark" href="#!">Ver todos</a>
         </div>
       </div>
     </div>

@@ -1,0 +1,62 @@
+networks:
+  net-sis257:
+    name: net-sis257
+    driver: bridge
+
+services:
+  db-sis257:
+    image: postgres
+    container_name: db-sis257
+    restart: always
+    ports:
+      - "5434:5432"
+    networks:
+      - net-sis257
+    environment:
+      POSTGRES_DB: BD_Tienda_de_Ropa
+      POSTGRES_USER: usr_tienda_de_ropa
+      POSTGRES_PASSWORD: tiendaderopa123
+    volumes:
+      - ./pgdata:/var/lib/postgresql/18/docker
+
+  backend-sis257:
+    depends_on:
+      - db-sis257
+    image: be-sis257
+    container_name: api-sis257
+    restart: unless-stopped
+    build:
+      context: ./backend_sis257_tiendaropa
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - net-sis257
+    environment:
+      DB_HOST: db-sis257
+      DB_PORT: 5432
+      DB_USER: usr_tienda_de_ropa
+      DB_PASSWORD: tiendaderopa123
+      DB_NAME: BD_Tienda_de_Ropa
+    volumes:
+      - ./backend_sis257_tiendaropa:/usr/src/app
+      - /usr/src/app/node_modules/
+
+  frontend-sis257:
+    depends_on:
+        - backend-sis257
+    image: fe-sis257
+    container_name: app-sis257
+    restart: unless-stopped
+    build:
+      context: ./frontend_sis257_tiendaropa
+      dockerfile: Dockerfile
+    ports:
+      - 80:85
+    networks:
+      - net-sis257
+    environment:
+      VITE_API_URL: http://backend-sis257:3000
+    volumes:
+      - ./frontend_sis257_tiendaropa:/app
+      - /app/node_modules/
