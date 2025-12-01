@@ -213,14 +213,26 @@ sis257_tienda_de_ropa/
 
 <table>
   <tr>
+    <!-- Tú -->
     <td align="center">
       <a href="https://github.com/aracelycopa123-collab">
-        <img src="https://github.com/aracelycopa123-collab.png" width="100px;" alt=""/>
+        <img src="https://github.com/aracelycopa123-collab.png" width="100px;" alt="Aracely Copa"/>
         <br />
         <sub><b>Aracely Copa</b></sub>
       </a>
       <br />
       <sub>Desarrolladora</sub>
+    </td>
+    
+    <!-- Roberto -->
+    <td align="center">
+      <a href="https://github.com/rober090401">
+        <img src="https://github.com/rober090401.png" width="100px;" alt="Roberto Cañizares"/>
+        <br />
+        <sub><b>Roberto Cañizares</b></sub>
+      </a>
+      <br />
+      <sub>Desarrollador</sub>
     </td>
   </tr>
 </table>
