@@ -1,13 +1,16 @@
-import { Injectable, UnauthorizedException, ConflictException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 import { UsuariosService } from 'src/usuarios/usuarios.service';
 import { ClientesService } from 'src/clientes/clientes.service';
-import { DataSource } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Cliente } from 'src/clientes/entities/cliente.entity';
 import { AuthLoginDto } from './dto/auth-login.dto';
 import { AuthRegisterDto } from './dto/auth-register.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +31,7 @@ export class AuthService {
   }
 
   async register(authRegisterDto: AuthRegisterDto): Promise<any> {
-    const { nombreUsuario, clave, nombre, apellido, telefono, direccion } =
+    const { nombreUsuario, clave, nombre, apellido, cedula, genero, fechaNacimiento, telefono, direccion, rol } =
       authRegisterDto;
 
     // Use a transaction so we don't leave an orphan Usuario if Cliente creation fails
@@ -42,11 +45,31 @@ export class AuthService {
           throw new ConflictException('El usuario ya existe');
         }
 
-        const nuevoUsuario = usuarioRepo.create({ nombreUsuario: nombreUsuario.trim(), clave: clave ?? (process.env.DEFAULT_PASSWORD ?? '') });
+        // Determinar el rol (admin o cliente)
+        const rolFinal = rol || 'cliente';
+
+        const nuevoUsuario = usuarioRepo.create({ 
+          nombreUsuario: nombreUsuario.trim(), 
+          clave: clave ?? (process.env.DEFAULT_PASSWORD ?? ''),
+          rol: rolFinal
+        });
         const usuarioGuardado = await usuarioRepo.save(nuevoUsuario);
 
-        const cliente = clienteRepo.create({ nombre: nombre?.trim(), apellido: apellido?.trim(), telefono: telefono?.trim(), direccion: direccion?.trim(), idUsuario: usuarioGuardado.id });
-        const clienteGuardado = await clienteRepo.save(cliente);
+        // Solo crear registro de Cliente si el rol es 'cliente'
+        let clienteGuardado: Cliente | null = null;
+        if (rolFinal === 'cliente') {
+          const cliente = clienteRepo.create({ 
+            nombre: nombre?.trim(), 
+            apellido: apellido?.trim(),
+            cedula: cedula?.trim(),
+            genero: genero?.trim(),
+            fechaNacimiento: fechaNacimiento ? new Date(fechaNacimiento) : undefined,
+            telefono: telefono?.trim(), 
+            direccion: direccion?.trim(), 
+            idUsuario: usuarioGuardado.id 
+          });
+          clienteGuardado = await clienteRepo.save(cliente);
+        }
 
         return { usuario: usuarioGuardado, cliente: clienteGuardado };
       });
@@ -84,5 +107,27 @@ export class AuthService {
     }
 
     return usuario;
+  }
+
+  async changePassword(userId: number, changePasswordDto: ChangePasswordDto): Promise<{ message: string }> {
+    const { claveActual, claveNueva } = changePasswordDto;
+
+    // Obtener el usuario con la clave
+    const usuario = await this.usuarioService.findOne(userId);
+    if (!usuario) {
+      throw new UnauthorizedException('Usuario no encontrado');
+    }
+
+    // Verificar la contraseña actual
+    const isPasswordValid = await usuario.validatePassword(claveActual);
+    if (!isPasswordValid) {
+      throw new BadRequestException('La contraseña actual es incorrecta');
+    }
+
+    // Actualizar la contraseña (el hook @BeforeUpdate se encarga del hash)
+    usuario.clave = claveNueva;
+    await this.dataSource.manager.save(usuario);
+
+    return { message: 'Contraseña actualizada correctamente' };
   }
 }
