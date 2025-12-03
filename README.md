@@ -29,28 +29,6 @@ El panel de administración permite gestionar productos, categorías, colores, c
 
 ---
 
-## 🔐 Sistema de Autenticación
-
-El sistema utiliza **JWT (JSON Web Tokens)** para la autenticación:
-
-| Rol | Acceso |
-|-----|--------|
-| **Administrador** | Panel completo de administración + tienda |
-| **Cliente** | Tienda, carrito, pedidos y perfil personal |
-
-### Credenciales de prueba
-
-```
-👤 Administrador
-   Usuario: admin
-   Contraseña: 123456
-
-👤 Cliente
-   Usuario: cliente1
-   Contraseña: 123456
-```
-
----
 
 ## 🗃️ Modelo de Datos
 
@@ -207,51 +185,6 @@ sis257_tienda_de_ropa/
 └── README.md
 ```
 
----
-
-## 👥 Colaboradores
-
-<table>
-  <tr>
-    <!-- Tú -->
-    <td align="center">
-      <a href="https://github.com/aracelycopa123-collab">
-        <img src="https://github.com/aracelycopa123-collab.png" width="100px;" alt="Aracely Copa"/>
-        <br />
-        <sub><b>Aracely Copa</b></sub>
-      </a>
-      <br />
-      <sub>Desarrolladora</sub>
-    </td>
-    
-    <!-- Roberto -->
-    <td align="center">
-      <a href="https://github.com/rober090401">
-        <img src="https://github.com/rober090401.png" width="100px;" alt="Roberto Cañizares"/>
-        <br />
-        <sub><b>Roberto Cañizares</b></sub>
-      </a>
-      <br />
-      <sub>Desarrollador</sub>
-    </td>
-  </tr>
-</table>
-
----
-
-## 📄 Licencia
-
-Este proyecto fue desarrollado como parte del curso **SIS-257** de la carrera de Ingeniería en Sistemas.
-
----
-
-<div align="center">
-
-**⭐ Si te gustó el proyecto, no olvides darle una estrella ⭐**
-
-Hecho con ❤️ en Bolivia 🇧🇴
-
-</div>
 
 
 
