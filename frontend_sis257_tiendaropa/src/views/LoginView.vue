@@ -50,7 +50,7 @@ async function onLogin() {
 
     if (success) {
       const role = localStorage.getItem('role') || authStore.role
-      
+
       if (isAdminRole(role)) {
         router.push(authStore.returnUrl || '/dashboard')
       } else {
@@ -58,7 +58,7 @@ async function onLogin() {
         const returnUrl = authStore.returnUrl
         const adminRoutes = ['/dashboard', '/categorias', '/productos', '/clientes', '/ventas']
         const isAdminRoute = adminRoutes.some(route => returnUrl?.startsWith(route))
-        
+
         if (returnUrl && !isAdminRoute && returnUrl !== '/login') {
           router.push(returnUrl)
         } else {
@@ -77,12 +77,12 @@ async function onLogin() {
 
 async function onRegister() {
   regError.value = ''
-  
+
   if (regForm.value.clave !== regForm.value.confirmarClave) {
     regError.value = 'Las contraseñas no coinciden'
     return
   }
-  
+
   if (regForm.value.clave.length < 4) {
     regError.value = 'La contraseña debe tener al menos 4 caracteres'
     return
@@ -105,7 +105,7 @@ async function onRegister() {
     }
 
     const response = await http.post('auth/register', payload)
-    
+
     if (response.data) {
       // Ya no necesitamos hacer PATCH, el rol se guarda en el registro
 
@@ -117,14 +117,14 @@ async function onRegister() {
         localStorage.setItem('user', response.data.usuario.nombreUsuario)
         authStore.user = response.data.usuario.nombreUsuario
       }
-      
+
       // Usar el rol del usuario creado o el tipo de registro
       const finalRole = response.data.usuario?.rol || registerType.value
       localStorage.setItem('role', finalRole)
       authStore.role = finalRole
 
       ;(window as any).__app_toasts?.push?.('Cuenta creada exitosamente', 'success', 3500)
-      
+
       if (registerType.value === 'admin') {
         router.push('/dashboard')
       } else {
@@ -177,7 +177,7 @@ function switchToLogin() {
 
       <!-- Panel derecho - Formularios -->
       <div class="form-panel">
-        
+
         <!-- ==================== VISTA DE LOGIN ==================== -->
         <div v-if="activeView === 'login'" class="form-content">
           <div class="form-header">
@@ -238,7 +238,7 @@ function switchToLogin() {
                 <span class="option-desc">Compra y seguimiento</span>
               </div>
             </button>
-            
+
             <button class="btn-option" @click="switchToRegister('admin')">
               <div class="option-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -371,7 +371,7 @@ function switchToLogin() {
 .pattern {
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     radial-gradient(circle at 25% 25%, rgba(255,255,255,0.02) 0%, transparent 50%),
     radial-gradient(circle at 75% 75%, rgba(255,255,255,0.02) 0%, transparent 50%);
 }
@@ -478,6 +478,8 @@ function switchToLogin() {
 
 .form-header {
   margin-bottom: 20px;
+  /* leave space for absolute back button to the left */
+  padding-left: 56px;
 }
 
 .form-header h1 {
@@ -598,26 +600,21 @@ function switchToLogin() {
   color: #666;
 }
 
-.btn-primary {
-  height: 48px;
-  background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
+.btn-back {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  transition: all 0.3s ease;
-  margin-top: 16px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: none;
+  border: 1px solid #eee;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 5;
 }
-
 .btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, #333 0%, #555 100%);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
@@ -772,30 +769,40 @@ function switchToLogin() {
     flex-direction: column;
     max-width: 500px;
   }
-  
+
   .brand-panel {
     flex: 0 0 auto;
     padding: 40px 30px;
   }
-  
+
   .brand-logo {
     font-size: 2rem;
     letter-spacing: 8px;
   }
-  
+
   .brand-description {
     display: none;
   }
-  
+
   .form-panel {
     padding: 40px 30px;
   }
-  
+
+  /* On narrower screens remove the header left padding so title aligns naturally */
+  .form-header {
+    padding-left: 0;
+  }
+
+  .btn-back {
+    top: 8px;
+    left: 8px;
+  }
+
   .input-row {
     flex-direction: column;
     gap: 18px;
   }
-  
+
   .register-options {
     flex-direction: column;
   }
@@ -805,16 +812,16 @@ function switchToLogin() {
   .auth-page {
     padding: 0;
   }
-  
+
   .auth-container {
     min-height: 100vh;
     box-shadow: none;
   }
-  
+
   .brand-panel {
     padding: 30px 24px;
   }
-  
+
   .form-panel {
     padding: 30px 24px;
   }

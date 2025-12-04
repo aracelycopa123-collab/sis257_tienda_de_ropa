@@ -75,6 +75,17 @@ export class VentasController {
     return this.ventasService.updateVenta(id, updateVentaDto);
   }
 
+  @Patch(':id/estado')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('admin')
+  @ApiResponse({ status: 200, description: 'Estado de la venta actualizado' })
+  async actualizarEstado(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('estado') estado: string,
+  ): Promise<Venta> {
+    return this.ventasService.cambiarEstadoVenta(id, estado);
+  }
+
   @Patch(':id/soft-remove')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('admin')

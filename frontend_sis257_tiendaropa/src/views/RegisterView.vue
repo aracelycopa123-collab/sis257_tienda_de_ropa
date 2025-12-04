@@ -24,23 +24,23 @@
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">Usuario *</label>
-              <input 
-                v-model="form.nombreUsuario" 
+              <input
+                v-model="form.nombreUsuario"
                 type="text"
                 class="form-control"
                 placeholder="Elige un nombre de usuario"
-                required 
-                maxlength="15" 
+                required
+                maxlength="15"
               />
             </div>
             <div class="form-group">
               <label class="form-label">Contraseña *</label>
-              <input 
-                type="password" 
-                v-model="form.clave" 
+              <input
+                type="password"
+                v-model="form.clave"
                 class="form-control"
                 placeholder="Crea una contraseña segura"
-                required 
+                required
               />
             </div>
           </div>
@@ -48,8 +48,8 @@
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">Nombre</label>
-              <input 
-                v-model="form.nombre" 
+              <input
+                v-model="form.nombre"
                 type="text"
                 class="form-control"
                 placeholder="Tu nombre"
@@ -57,8 +57,8 @@
             </div>
             <div class="form-group">
               <label class="form-label">Apellido</label>
-              <input 
-                v-model="form.apellido" 
+              <input
+                v-model="form.apellido"
                 type="text"
                 class="form-control"
                 placeholder="Tu apellido"
@@ -69,8 +69,8 @@
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">Cédula / CI</label>
-              <input 
-                v-model="form.cedula" 
+              <input
+                v-model="form.cedula"
                 type="text"
                 class="form-control"
                 placeholder="Número de CI"
@@ -91,16 +91,16 @@
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">Fecha de Nacimiento</label>
-              <input 
-                v-model="form.fechaNacimiento" 
+              <input
+                v-model="form.fechaNacimiento"
                 type="date"
                 class="form-control"
               />
             </div>
             <div class="form-group">
               <label class="form-label">Teléfono</label>
-              <input 
-                v-model="form.telefono" 
+              <input
+                v-model="form.telefono"
                 type="tel"
                 class="form-control"
                 placeholder="Tu número de teléfono"
@@ -108,10 +108,10 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group full-width">
             <label class="form-label">Dirección</label>
-            <input 
-              v-model="form.direccion" 
+            <input
+              v-model="form.direccion"
               type="text"
               class="form-control"
               placeholder="Tu dirección de envío"
@@ -127,7 +127,7 @@
             <span>{{ error }}</span>
           </div>
 
-          <button class="btn-register" type="submit" :disabled="loading">
+          <button class="btn-register full-width" type="submit" :disabled="loading">
             <span v-if="loading">
               <span class="spinner"></span>
               Creando cuenta...
@@ -135,7 +135,7 @@
             <span v-else>Crear mi cuenta</span>
           </button>
 
-          <div class="login-link">
+          <div class="login-link full-width">
             <span>¿Ya tienes una cuenta?</span>
             <RouterLink to="/login">Inicia sesión aquí</RouterLink>
           </div>
@@ -223,15 +223,31 @@ const submit = async () => {
 
 .register-container {
   width: 100%;
-  max-width: 520px;
+  max-width: 900px;
 }
 
 .register-card {
   background: white;
-  padding: 50px 40px;
+  padding: 30px 30px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
+/* Ensure header elements don't overlap: give title higher stacking and extra top spacing */
+.register-card,
+.register-container {
+  position: relative;
+}
+
+.register-title {
+  position: relative;
+  z-index: 2;
+  margin-top: 6px; /* small gap to avoid overlapping icons */
+}
+
+.role-badge {
+  margin-top: 8px;
+  z-index: 1;
+}
 .logo {
   height: 50px;
   opacity: 0.9;
@@ -265,17 +281,28 @@ const submit = async () => {
 }
 
 .register-form {
-  margin-top: 32px;
-}
-
-.form-row {
-  display: flex;
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
 
+.form-row {
+  display: contents;
+}
+
 .form-group {
-  flex: 1;
   margin-bottom: 20px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Small safeguard: if any small decorative arrow/icon uses absolute positioning,
+   keep it from covering text by lowering its z-index when inside the card */
+.register-card svg {
+  z-index: 0;
 }
 
 .form-label {
@@ -405,12 +432,16 @@ select.form-control {
   .register-card {
     padding: 30px 24px;
   }
-  
-  .form-row {
-    flex-direction: column;
-    gap: 0;
+
+  .register-container {
+    max-width: 520px;
   }
-  
+
+  .register-form {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
   .register-title {
     font-size: 1.5rem;
   }

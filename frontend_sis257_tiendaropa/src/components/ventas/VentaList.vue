@@ -41,6 +41,7 @@ const ventas = ref<Venta[]>([])
 const loading = ref(true)
 const ventaSeleccionada = ref<Venta | null>(null)
 const busqueda = ref('')
+const openDropdownId = ref<number | null>(null)
 
 // Filtrar ventas por búsqueda
 const ventasFiltradas = computed(() => {
@@ -138,17 +139,36 @@ const cerrarDetalle = () => {
 }
 
 const cambiarEstado = async (venta: Venta, nuevoEstado: string) => {
+  console.log('cambiarEstado called for', venta.id, nuevoEstado)
   try {
     const confirmMsg = `¿Confirmas cambiar el estado de la venta #${venta.id} a "${nuevoEstado}"?`;
     if (!confirm(confirmMsg)) return;
-    await http.patch(`ventas/${venta.id}`, { estado: nuevoEstado })
+    // Llamada al endpoint dedicado para actualizar el estado (protegido para administradores)
+    await http.patch(`ventas/${venta.id}/estado`, { estado: nuevoEstado })
     // recargar lista
     await cargarVentas()
     alert('Estado actualizado correctamente')
-  } catch (err) {
+  } catch (err: any) {
     console.error('Error actualizando estado:', err)
-    alert('Error al actualizar el estado. Revisa la consola del servidor.')
+    // mostrar mensaje más informativo si viene del servidor
+    const msg = (err as any)?.response?.data?.message || 'Error al actualizar el estado. Revisa la consola del servidor.'
+    alert(msg)
   }
+}
+
+const toggleDropdown = (id: number) => {
+  console.log('toggleDropdown', id, 'current', openDropdownId.value)
+  openDropdownId.value = openDropdownId.value === id ? null : id
+}
+
+// Cerrar dropdown si clic fuera
+if (typeof window !== 'undefined') {
+  window.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement
+    if (!target.closest('.status-dropdown')) {
+      openDropdownId.value = null
+    }
+  })
 }
 
 onMounted(() => cargarVentas())
@@ -170,10 +190,10 @@ onMounted(() => cargarVentas())
           <circle cx="11" cy="11" r="8"/>
           <path d="m21 21-4.35-4.35"/>
         </svg>
-        <input 
+        <input
           v-model="busqueda"
-          type="text" 
-          class="search-input" 
+          type="text"
+          class="search-input"
           placeholder="Buscar venta (cliente, estado, método de pago...)"
         />
         <button v-if="busqueda" @click="busqueda = ''" class="search-clear">
@@ -277,8 +297,8 @@ onMounted(() => cargarVentas())
                     <circle cx="12" cy="12" r="3"/>
                   </svg>
                 </button>
-                <div class="status-dropdown">
-                  <button class="btn-icon btn-status" title="Cambiar estado">
+                <div :class="['status-dropdown', { open: openDropdownId === venta.id }]">
+                  <button @click.stop="toggleDropdown(venta.id)" class="btn-icon btn-status" title="Cambiar estado">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="1"/>
                       <circle cx="19" cy="12" r="1"/>
@@ -332,7 +352,7 @@ onMounted(() => cargarVentas())
           </tr>
         </tbody>
       </table>
-      
+
       <!-- Contador de registros -->
       <div class="table-footer">
         <span class="records-count">
@@ -742,6 +762,7 @@ onMounted(() => cargarVentas())
 
 .status-dropdown {
   position: relative;
+  z-index: 200;
 }
 
 .dropdown-menu {
@@ -761,7 +782,8 @@ onMounted(() => cargarVentas())
   z-index: 100;
 }
 
-.status-dropdown:hover .dropdown-menu {
+.status-dropdown:hover .dropdown-menu,
+.status-dropdown.open .dropdown-menu {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);

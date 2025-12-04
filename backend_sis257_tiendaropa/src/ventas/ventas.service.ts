@@ -480,4 +480,36 @@ export class VentasService {
 
     return this.obtenerVentaPorId(ventaActualizada.id);
   }
+
+  async cambiarEstadoVenta(id: number, nuevoEstado: string): Promise<Venta> {
+    console.log(`cambiarEstadoVenta: id=${id}, nuevoEstado=${nuevoEstado}`);
+    const venta = await this.ventaRepository.findOne({
+      where: { id },
+      relations: ['cliente', 'ventadetalles', 'ventadetalles.producto'],
+    });
+
+    if (!venta) {
+      console.log(`Venta con ID ${id} no encontrada para cambiar estado`);
+      throw new NotFoundException(`La venta con ID ${id} no fue encontrada`);
+    }
+
+    venta.estado = nuevoEstado;
+    const ahora = new Date();
+    if (nuevoEstado === 'confirmado' && !venta.fechaConfirmacion) {
+      venta.fechaConfirmacion = ahora;
+    }
+    if (nuevoEstado === 'enviado' && !venta.fechaEnvio) {
+      venta.fechaEnvio = ahora;
+      if (!venta.numeroSeguimiento) {
+        venta.numeroSeguimiento = `MAJ-${Date.now().toString(36).toUpperCase()}`;
+      }
+    }
+    if (nuevoEstado === 'entregado' && !venta.fechaEntrega) {
+      venta.fechaEntrega = ahora;
+    }
+
+    const guardado = await this.ventaRepository.save(venta);
+    console.log('Estado de venta actualizado:', guardado.estado);
+    return this.obtenerVentaPorId(guardado.id);
+  }
 }
